@@ -8,7 +8,7 @@ Github repo: https://github.com/JizhiziLi/GFM
 Paper link (Arxiv): https://arxiv.org/abs/2010.16188
 
 """
-
+import time
 import argparse
 import torch
 import torch.nn as nn
@@ -24,6 +24,40 @@ from util import *
 from evaluate import *
 from gfm import GFM
 from data import MattingDataset, MattingTransform
+
+class Kong_args():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 100
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 16    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "closed_form"
+		self.rssn_denoise    = True
+		self.model_save_dir  = "models/trained/kong_train"
+		self.logname         = "train_log"
+
+class Rebar_args():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 9500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train"
+		self.logname         = "train_log"
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/models/trained/kong_trainckpt_epoch4000.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
 def get_args():
@@ -90,6 +124,24 @@ def train(args, model, optimizer, train_loader, epoch):
 			item = Variable(item).cuda()
 			batch_new.append(item)
 		[ori, mask, fg, bg, trimap, dilation, erosion, dilation_subtraction, erosion_subtraction] = batch_new
+		# print("                 ori.min()):", ori.min())  ### 0
+		# print("                 ori.max()):", ori.max())  ### 255
+		# print("                mask.min()):", mask.min())  ### 0
+		# print("                mask.max()):", mask.max())  ### 255
+		# print("                  fg.min()):", fg.min())  ### 0
+		# print("                  fg.max()):", fg.max())  ### 255
+		# print("                  bg.min()):", bg.min())  ### 0
+		# print("                  bg.max()):", bg.max())  ### 255
+		# print("              trimap.min()):", trimap.min())  ### 0
+		# print("              trimap.max()):", trimap.max())  ### 255
+		# print("            dilation.min()):", dilation.min())  ### 0
+		# print("            dilation.max()):", dilation.max())  ### 255
+		# print("             erosion.min()):", erosion.min())  ### 0
+		# print("             erosion.max()):", erosion.max())  ### 0
+		# print("dilation_subtraction.min()):", dilation_subtraction.min())  ### 0
+		# print("dilation_subtraction.max()):", dilation_subtraction.max())  ### 255
+		# print(" erosion_subtraction.min()):", erosion_subtraction.min())  ### 0
+		# print(" erosion_subtraction.max()):", erosion_subtraction.max())  ### 255
 		optimizer.zero_grad()
 		### Predict by the model 
 		### And calculate the training losses
@@ -157,7 +209,9 @@ def save_last_checkpoint(args, model):
 	args.logging.info("Checkpoint saved to {}".format(model_out_path))
 
 def main():
-	args = get_args()
+	# args = get_args()
+	# args = Kong_args()
+	args = Rebar_args()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
@@ -203,4 +257,11 @@ def main():
 	save_last_checkpoint(args, model)
 
 if __name__ == "__main__":
+	start_time = time.time()
+	print("start_time:", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(start_time)))
 	main()
+	end_time = time.time()
+	cost_time = end_time - start_time
+	print("start_time:", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(start_time)))
+	print("end_time  :", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(end_time)))
+	print("cost_time :", cost_time / 60 , "min, ", cost_time % 60, "sec")
