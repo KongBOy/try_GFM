@@ -22,6 +22,30 @@ from util import *
 from evaluate import *
 from gfm import GFM
 
+class Kong_args():
+	def __init__(self):
+		self.cuda         		= False
+		self.backbone           = "r34_2b"
+		self.rosta              = "TT"
+		self.model_path         = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/core/models/pretrained/gfm_r34_2b_tt.pth"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.test_result_dir    = ""
+		self.logname            = "test_log"
+
+class Rebar_args():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.model_path         = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/models/trained/kong_trainckpt_epoch4000.pth"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.test_result_dir    = ""
+		self.logname            = "test_log"
 
 def get_args():
 	
@@ -245,14 +269,14 @@ def test_samples(args, model):
 			print(f'Error: {str(e)} | Name: {img_name}')
 		h, w, c = img.shape
 		if min(h, w)>SHORTER_PATH_LIMITATION:
-		  if h>=w:
-			  new_w = SHORTER_PATH_LIMITATION
-			  new_h = int(SHORTER_PATH_LIMITATION*h/w)
-			  img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-		  else:
-			  new_h = SHORTER_PATH_LIMITATION
-			  new_w = int(SHORTER_PATH_LIMITATION*w/h)
-			  img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+			if h>=w:
+				new_w = SHORTER_PATH_LIMITATION
+				new_h = int(SHORTER_PATH_LIMITATION*h/w)
+				img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+			else:
+				new_h = SHORTER_PATH_LIMITATION
+				new_w = int(SHORTER_PATH_LIMITATION*w/h)
+				img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
 
 		with torch.no_grad():
 			if args.cuda:
@@ -308,7 +332,8 @@ def load_model_and_deploy(args):
 
 
 if __name__ == '__main__':
-	args = get_args()
+	# args = get_args()
+	args = Rebar_args()
 	load_model_and_deploy(args)
 
 
