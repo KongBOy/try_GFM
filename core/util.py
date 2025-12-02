@@ -16,7 +16,9 @@ import numpy as np
 import cv2
 from PIL import Image
 from config import *
-
+from skimage.transform import resize
+import random
+import matplotlib.pyplot as plt
 ##########################
 ### Pure functions
 ##########################
@@ -124,10 +126,17 @@ def generate_paths_for_dataset(args):
 	BG_CHOICE = args.bg_choice
 	FG_GENERATE = args.fg_generate
 	RSSN_DENOISE = args.rssn_denoise
-	ORI_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['ORIGINAL_PATH']
-	MASK_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['MASK_PATH']
-	SAMPLE_BAGS = 1 if BG_CHOICE=='original' else DATASET_PATHS_DICT['AM2K']['TRAIN']['SAMPLE_BAGS']
-	FG_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['FG_PATH'] if FG_GENERATE=='closed_form' else None 
+
+	if(args.dataset_using == "Rebar"):
+		ORI_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['ORIGINAL_PATH']
+		MASK_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['MASK_PATH']
+		SAMPLE_BAGS = 1 if BG_CHOICE=='original' else DATASET_PATHS_DICT['Rebar']['TRAIN']['SAMPLE_BAGS']
+		FG_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['FG_PATH'] if FG_GENERATE=='closed_form' else None 
+	elif(args.dataset_using == "AM2K"):
+		ORI_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['ORIGINAL_PATH']
+		MASK_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['MASK_PATH']
+		SAMPLE_BAGS = 1 if BG_CHOICE=='original' else DATASET_PATHS_DICT['AM2K']['TRAIN']['SAMPLE_BAGS']
+		FG_PATH = DATASET_PATHS_DICT['AM2K']['TRAIN']['FG_PATH'] if FG_GENERATE=='closed_form' else None 
 	
 	if BG_CHOICE=='hd':
 		BG_PATH = DATASET_PATHS_DICT['BG20K']['TRAIN']['ORIGINAL_PATH']
@@ -176,6 +185,7 @@ def trim_img(img):
 	return img
 
 def resize_img(ori, img):
+	# 用 skimage resize 做完的結果 會被弄到 0~1, 拉回 0~255
 	img = resize(img, ori.shape)*255.0
 	return img
 
@@ -185,6 +195,15 @@ def process_fgbg(ori, mask, is_fg, fgbg_path=None):
 	else:
 		mask_3 = (mask/255.0)[:, :, np.newaxis].astype(np.float32)
 		img = ori*mask_3 if is_fg else ori*(1-mask_3)
+		# fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(20, 8))
+		# ax[0].imshow(ori    .astype(np.uint8))
+		# ax[1].imshow(mask_3 .astype(np.uint8))
+		# ax[2].imshow(img    .astype(np.uint8))
+		# ax[3].imshow(img    .astype(np.float32)/255.)
+		# fig.tight_layout()
+		# print(img.min())
+		# print(img.max())
+		# plt.show()
 	return img
 
 def add_guassian_noise(img, fg, bg):
@@ -201,20 +220,23 @@ def add_guassian_noise(img, fg, bg):
 def generate_composite_rssn(fg, bg, mask, fg_denoise=None, bg_denoise=None):
 	## resize bg accordingly
 	h, w, c = fg.shape
+	### clone 一份 mask 成 alpha 並把數值縮放到0~1之間
 	alpha = np.zeros((h, w, 1), np.float32)
 	alpha[:, :, 0] = mask / 255.
+	### bg縮放成跟 fg 一樣的大小
 	bg = resize_img(fg, bg)
-	## use denoise fg/bg randomly
+	### 如果有給 fg_denoise 的話, 有50% 的機率 把 fg, bg 替換成 fg_denoise, bg_denoise(縮放成跟fg_denoise一樣大)
 	if fg_denoise is not None and random.random()<0.5:
 		fg = fg_denoise
 		bg = resize_img(fg, bg_denoise)
-	## reduce sharpness discrepancy
+	### 50% 的機率 把 背景弄糊
 	if random.random()<0.5:
 		rand_kernel = random.choice([20,30,40,50,60])
 		bg = cv2.blur(bg, (rand_kernel,rand_kernel))
+	### 前景 + 背景 用 alpha 做合成
 	composite = alpha * fg + (1 - alpha) * bg
 	composite = composite.astype(np.uint8)
-	## reduce noise discrepancy
+	### 50% 的機率把整張圖做高斯雜訊
 	if random.random()<0.5:
 		composite, fg, bg = add_guassian_noise(composite, fg, bg)
 	return composite, fg, bg
@@ -230,21 +252,33 @@ def generate_composite_coco(fg, bg, mask):
 
 
 def gen_trimap_with_dilate(alpha, kernel_size):	
+	# fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(18, 5))
 	kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size,kernel_size))
+	### 可能是前景的部分 都保留下來 (1~255 的地方弄成 1, 剩下 歸0)
 	fg_and_unknown = np.array(np.not_equal(alpha, 0).astype(np.float32))
+	# ax[0].imshow(fg_and_unknown)
+	### 保證是前景的部分 才留下來 (只有255 的地方弄成 1, 剩下 歸0)
 	fg = np.array(np.equal(alpha, 255).astype(np.float32))
+	# ax[1].imshow(fg)
+	### 可能是前景的部分 做膨脹, 大概就是 可能原本可能是前景的部分會不會沒抓的很完整, 把可能的區域再往外擴一些應該就可以擴到全部了
 	dilate =  cv2.dilate(fg_and_unknown, kernel, iterations=1)
+	### 保證是前景的部分 做侵蝕, 更保證了裡面的東西 一定事前景
 	erode = cv2.erode(fg, kernel, iterations=1)
+	### 可能是前景的部分再往外擴一些 扣除 更保證是前景的部分, 就留下了 不確定 但很有可能是前景的的區域 囉
 	trimap = erode *255 + (dilate-erode)*128
+	# ax[2].imshow(trimap)
+	# plt.show()
 	return trimap.astype(np.uint8)
 
-def gen_dilate(alpha, kernel_size): 
+def gen_dilate(alpha, kernel_size):
+	### 同上原理, 可能是前景的部分 都保留下來 做膨脹, 大概就是 可能原本可能是前景的部分會不會沒抓的很完整, 把可能的區域再往外擴一些應該就可以擴到全部了
 	kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size,kernel_size))
 	fg_and_unknown = np.array(np.not_equal(alpha, 0).astype(np.float32))
 	dilate =  cv2.dilate(fg_and_unknown, kernel, iterations=1)*255
 	return dilate.astype(np.uint8)
 
 def gen_erosion(alpha, kernel_size): 
+	### 同上原理, 保證是前景的部分 才留下來 做侵蝕, 更保證了裡面的東西 一定事前景
 	kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size,kernel_size))
 	fg = np.array(np.equal(alpha, 255).astype(np.float32))
 	erode = cv2.erode(fg, kernel, iterations=1)*255

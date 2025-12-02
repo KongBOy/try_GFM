@@ -39,6 +39,7 @@ class Kong_args():
 		self.rssn_denoise    = True
 		self.model_save_dir  = "models/trained/kong_train"
 		self.logname         = "train_log"
+		self.dataset_using   = "AM2K"
 
 class Rebar_args():
 	def __init__(self):
@@ -54,6 +55,7 @@ class Rebar_args():
 		self.rssn_denoise    = False
 		self.model_save_dir  = "models/trained/kong_train"
 		self.logname         = "train_log"
+		self.dataset_using   = "Rebar"
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/models/trained/kong_trainckpt_epoch4000.pth"
