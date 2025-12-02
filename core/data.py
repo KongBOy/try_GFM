@@ -25,7 +25,7 @@ import pickle
 from torchvision import transforms
 from torch.autograd import Variable
 from skimage.transform import resize
-
+import matplotlib.pyplot as plt
 #########################
 ## Data transformer
 #########################
@@ -34,6 +34,18 @@ class MattingTransform(object):
 		super(MattingTransform, self).__init__()
 
 	def __call__(self, *argv):
+		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
+		# ax[0].imshow(argv[0].astype(np.uint8))  ### ori
+		# ax[1].imshow(argv[1].astype(np.uint8))  ### mask
+		# ax[2].imshow(argv[2].astype(np.uint8))  ### fg, 
+		# ax[3].imshow(argv[3].astype(np.uint8))  ### bg, 
+		# ax[4].imshow(argv[4].astype(np.uint8))  ### trimap, 
+		# ax[5].imshow(argv[5].astype(np.uint8))  ### dilation, 
+		# ax[6].imshow(argv[6].astype(np.uint8))  ### erosion, 
+		# ax[7].imshow(argv[7].astype(np.uint8))  ### dilation_subtraction, 
+		# ax[8].imshow(argv[8].astype(np.uint8))  ### erosion_subtraction
+		# fig.tight_layout()
+		# plt.show()
 		ori = argv[0]
 		h, w, c = ori.shape
 		rand_ind = random.randint(0, len(CROP_SIZE) - 1)
@@ -58,7 +70,18 @@ class MattingTransform(object):
 				item = cv2.flip(item, 1)
 			item = cv2.resize(item, (resize_size, resize_size), interpolation=cv2.INTER_LINEAR)
 			argv_transform.append(item)
-
+		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
+		# ax[0].imshow(argv_transform[0].astype(np.uint8))  ### ori
+		# ax[1].imshow(argv_transform[1].astype(np.uint8))  ### mask
+		# ax[2].imshow(argv_transform[2].astype(np.uint8))  ### fg, 
+		# ax[3].imshow(argv_transform[3].astype(np.uint8))  ### bg, 
+		# ax[4].imshow(argv_transform[4].astype(np.uint8))  ### trimap, 
+		# ax[5].imshow(argv_transform[5].astype(np.uint8))  ### dilation, 
+		# ax[6].imshow(argv_transform[6].astype(np.uint8))  ### erosion, 
+		# ax[7].imshow(argv_transform[7].astype(np.uint8))  ### dilation_subtraction, 
+		# ax[8].imshow(argv_transform[8].astype(np.uint8))  ### erosion_subtraction
+		# fig.tight_layout()
+		# plt.show()
 		return argv_transform
 
 #########################
@@ -93,10 +116,16 @@ class MattingDataset(torch.utils.data.Dataset):
 		mask = trim_img(np.array(Image.open(mask_path)))
 		fg = process_fgbg(ori, mask, True, fg_path)
 		bg = process_fgbg(ori, mask, False, bg_path)
+		# fig, ax = plt.subplots(ncols=2, nrows=1, figsize=(10, 8))
+		# ax[0].imshow(fg.astype(np.uint8))
+		# ax[1].imshow(bg.astype(np.uint8))
+		# plt.tight_layout()
+		# plt.show()
 		# Prepare composite for hd/coco
 		if self.BG_CHOICE == 'hd':
 			fg_denoise = process_fgbg(ori, mask, True, fg_path_denoise) if self.RSSN_DENOISE else None
 			bg_denoise = process_fgbg(ori, mask, True, bg_path_denoise) if self.RSSN_DENOISE else None
+			### 把 背景 resize成 前景大小, 50% 機率替換成denoise版本, 50% 機率背景模糊, 50% 機率加上高斯雜訊
 			ori, fg, bg = generate_composite_rssn(fg, bg, mask, fg_denoise, bg_denoise)
 		elif self.BG_CHOICE == 'coco':
 			ori, fg, bg = generate_composite_coco(fg, bg, mask)
@@ -110,6 +139,18 @@ class MattingDataset(torch.utils.data.Dataset):
 		erosion_subtraction = mask-erosion
 		# Data transformation to generate samples
 		# crop/flip/resize
+		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
+		# ax[0].imshow(ori                 .astype(np.uint8))  ### ori
+		# ax[1].imshow(mask                .astype(np.uint8))  ### mask
+		# ax[2].imshow(fg                  .astype(np.uint8))  ### fg, 
+		# ax[3].imshow(bg                  .astype(np.uint8))  ### bg, 
+		# ax[4].imshow(trimap              .astype(np.uint8))  ### trimap, 
+		# ax[5].imshow(dilation            .astype(np.uint8))  ### dilation, 
+		# ax[6].imshow(erosion             .astype(np.uint8))  ### erosion, 
+		# ax[7].imshow(dilation_subtraction.astype(np.uint8))  ### dilation_subtraction, 
+		# ax[8].imshow(erosion_subtraction .astype(np.uint8))  ### erosion_subtraction
+		# fig.tight_layout()
+		# plt.show()
 		argv = self.transform(ori, mask, fg, bg, trimap, dilation, erosion, dilation_subtraction, erosion_subtraction)
 		argv_transform = []
 		for item in argv:
