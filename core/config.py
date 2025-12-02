@@ -10,9 +10,10 @@ Paper link (Arxiv): https://arxiv.org/abs/2010.16188
 """
 
 ########## Root Paths and logging files paths
-REPOSITORY_ROOT_PATH = ''
-AM2K_DATASET_ROOT_PATH = ''
-BG20K_DATASET_ROOT_PATH = ''
+REPOSITORY_ROOT_PATH = 'Rebar/'
+REBAR_DATASET_ROOT_PATH = 'C:/Users/HP820G1/Desktop/img_matting_try/Rebar/'
+AM2K_DATASET_ROOT_PATH  = 'C:/Users/HP820G1/Desktop/img_matting_try/AM-2k/'
+BG20K_DATASET_ROOT_PATH = 'C:/Users/HP820G1/Desktop/img_matting_try/BG-20k/'
 COCO_DATASET_ROOT_PATH = ''
 
 TRAIN_LOGS_FOLDER = REPOSITORY_ROOT_PATH+'logs/train_logs/'
@@ -20,6 +21,26 @@ TEST_LOGS_FOLDER = REPOSITORY_ROOT_PATH+'logs/test_logs/'
 
 # ######### Paths of datasets
 DATASET_PATHS_DICT={
+'Rebar':{
+	'TRAIN':{
+		'ROOT_PATH'       :REBAR_DATASET_ROOT_PATH+'train/',
+		'ORIGINAL_PATH'   :REBAR_DATASET_ROOT_PATH+'train/original/',
+		'MASK_PATH'       :REBAR_DATASET_ROOT_PATH+'train/mask/',
+		'FG_PATH'         :REBAR_DATASET_ROOT_PATH+'train/fg/',
+		'BG_PATH'	      :REBAR_DATASET_ROOT_PATH+'train/bg/',
+		'FG_DENOISE_PATH' :REBAR_DATASET_ROOT_PATH+'train/fg_denoise/',
+		'SAMPLE_NUMBER'   :3,
+		'SAMPLE_BAGS'     :3
+		},
+	'VALIDATION':{
+		'ROOT_PATH'     :REBAR_DATASET_ROOT_PATH+'validation/',
+		'ORIGINAL_PATH' :REBAR_DATASET_ROOT_PATH+'validation/original/',
+		'MASK_PATH'		:REBAR_DATASET_ROOT_PATH+'validation/mask/',
+		'TRIMAP_PATH'	:REBAR_DATASET_ROOT_PATH+'validation/trimap/',
+		'SAMPLE_NUMBER' :3,
+		'SAMPLE_BAGS'   :1
+		}
+	},
 'AM2K':{
 	'TRAIN':{
 		'ROOT_PATH':AM2K_DATASET_ROOT_PATH+'train/',
