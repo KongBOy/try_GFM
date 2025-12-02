@@ -187,8 +187,8 @@ def test_am2k(args, model):
 	img_list = listdir_nohidden(ORIGINAL_PATH)
 
 	total_number = len(img_list)
-	args.logging.info("===============================")
-	args.logging.info(f'====> Start Testing\n\t--Dataset: {args.dataset_choice}\n\t--Test: {args.test_choice}\n\t--Number: {total_number}')
+	print("===============================")
+	print(f'====> Start Testing\n\t--Dataset: {args.dataset_choice}\n\t--Test: {args.test_choice}\n\t--Number: {total_number}')
 
 	for img_name in tqdm(img_list):
 
@@ -218,7 +218,7 @@ def test_am2k(args, model):
 				conn_diff = compute_connectivity_loss_whole_image(predict, alpha)
 				grad_diff = compute_gradient_whole_image(predict, alpha)
 
-				args.logging.info(f"[{img_list.index(img_name)+1}/{total_number}]\nImage:{img_name}\nsad:{sad_diff}\nmse:{mse_diff}\nmad:{mad_diff}\nsad_trimap:{sad_trimap_diff}\nmse_trimap:{mse_trimap_diff}\nmad_trimap:{mad_trimap_diff}\nsad_fg:{sad_fg_diff}\nsad_bg:{sad_bg_diff}\nconn:{conn_diff}\ngrad:{grad_diff}\n-----------")
+				print(f"[{img_list.index(img_name)+1}/{total_number}]\nImage:{img_name}\nsad:{sad_diff}\nmse:{mse_diff}\nmad:{mad_diff}\nsad_trimap:{sad_trimap_diff}\nmse_trimap:{mse_trimap_diff}\nmad_trimap:{mad_trimap_diff}\nsad_fg:{sad_fg_diff}\nsad_bg:{sad_bg_diff}\nconn:{conn_diff}\ngrad:{grad_diff}\n-----------")
 				sad_diffs += sad_diff
 				mse_diffs += mse_diff
 				mad_diffs += mad_diff
@@ -231,20 +231,20 @@ def test_am2k(args, model):
 				grad_diffs += grad_diff
 				save_test_result(os.path.join(args.test_result_dir, extract_pure_name(img_name)+'.png'),predict)
 
-	args.logging.info("===============================")
-	args.logging.info(f"Testing numbers: {total_number}")
+	print("===============================")
+	print(f"Testing numbers: {total_number}")
 
 	if pred_choice in [3,4]:
-		args.logging.info("SAD: {}".format(sad_diffs / total_number))
-		args.logging.info("MSE: {}".format(mse_diffs / total_number))
-		args.logging.info("MAD: {}".format(mad_diffs / total_number))
-		args.logging.info("GRAD: {}".format(grad_diffs / total_number))
-		args.logging.info("CONN: {}".format(conn_diffs / total_number))
-		args.logging.info("SAD TRIMAP: {}".format(sad_trimap_diffs / total_number))
-		args.logging.info("MSE TRIMAP: {}".format(mse_trimap_diffs / total_number))
-		args.logging.info("MAD TRIMAP: {}".format(mad_trimap_diffs / total_number))
-		args.logging.info("SAD FG: {}".format(sad_fg_diffs / total_number))
-		args.logging.info("SAD BG: {}".format(sad_bg_diffs / total_number))
+		print("SAD: {}".format(sad_diffs / total_number))
+		print("MSE: {}".format(mse_diffs / total_number))
+		print("MAD: {}".format(mad_diffs / total_number))
+		print("GRAD: {}".format(grad_diffs / total_number))
+		print("CONN: {}".format(conn_diffs / total_number))
+		print("SAD TRIMAP: {}".format(sad_trimap_diffs / total_number))
+		print("MSE TRIMAP: {}".format(mse_trimap_diffs / total_number))
+		print("MAD TRIMAP: {}".format(mad_trimap_diffs / total_number))
+		print("SAD FG: {}".format(sad_fg_diffs / total_number))
+		print("SAD BG: {}".format(sad_bg_diffs / total_number))
 		return int(sad_diffs/total_number)
 	else:
 		return 0

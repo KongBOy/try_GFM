@@ -96,11 +96,11 @@ def load_dataset(args):
 	return train_loader
 
 def load_model(args):
-	args.logging.info("\t--Model backbone: {}".format(args.backbone))
-	args.logging.info("\t--Model rosta: {}".format(args.rosta))
-	args.logging.info("\t--BG choice: {}".format(args.bg_choice))
-	args.logging.info("\t--FG generate method: {}".format(args.fg_generate))
-	args.logging.info("\t--Denoise choice: {}".format(args.rssn_denoise))
+	print("\t--Model backbone: {}".format(args.backbone))
+	print("\t--Model rosta: {}".format(args.rosta))
+	print("\t--BG choice: {}".format(args.bg_choice))
+	print("\t--FG generate method: {}".format(args.fg_generate))
+	print("\t--Denoise choice: {}".format(args.rssn_denoise))
 	model = GFM(args)
 	start_epoch = 1
 	return model, start_epoch
@@ -118,7 +118,7 @@ def train(args, model, optimizer, train_loader, epoch):
 	t0 = time.time()
 
 	loss_each_epoch=[]
-	args.logging.info("===============================")
+	print("===============================")
 	for iteration, batch in enumerate(train_loader, 1):
 		torch.cuda.empty_cache()
 		batch_new = []
@@ -199,12 +199,12 @@ def train(args, model, optimizer, train_loader, epoch):
 			exp_time = format_second(speed * (num_iter * (args.nEpochs - epoch + 1) - iteration))          
 			loss_each_epoch.append(loss.item())
 			if args.rosta=='RIM':
-				args.logging.info("GFM-RIM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Loss-TT:{:.5f} Loss-FT:{:.5f} Loss-BT:{:.5f} Loss-final:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_tt.item(), loss_ft.item(), loss_bt.item(), loss_final.item(),speed, exp_time))
+				print("GFM-RIM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Loss-TT:{:.5f} Loss-FT:{:.5f} Loss-BT:{:.5f} Loss-final:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_tt.item(), loss_ft.item(), loss_bt.item(), loss_final.item(),speed, exp_time))
 			else:
-				args.logging.info("GFM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Global:{:.5f} Local:{:.5f} Fusion-alpha:{:.5f} Fusion-comp:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_global.item(), loss_local.item(), loss_fusion_alpha.item(), loss_fusion_comp.item(),speed, exp_time))
+				print("GFM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Global:{:.5f} Local:{:.5f} Fusion-alpha:{:.5f} Fusion-comp:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_global.item(), loss_local.item(), loss_fusion_alpha.item(), loss_fusion_comp.item(),speed, exp_time))
 			
 def save_last_checkpoint(args, model):
-	args.logging.info('=====> Saving best model',str(args.epoch))
+	print('=====> Saving best model',str(args.epoch))
 	create_folder_if_not_exists(args.model_save_dir)
 	model_out_path = "{}ckpt_epoch{}.pth".format(args.model_save_dir, args.epoch)
 	torch.save(model.state_dict(), model_out_path)
