@@ -98,10 +98,10 @@ class MattingDataset(torch.utils.data.Dataset):
 		self.FG_CF = True if args.fg_generate=='closed_form' else False
 		self.RSSN_DENOISE = args.rssn_denoise
 		
-		self.logging.info('===> Loading training set')
+		print('===> Loading training set')
 		self.samples += generate_paths_for_dataset(args)
-		self.logging.info(f"\t--crop_size: {CROP_SIZE} | resize: {RESIZE_SIZE}")
-		self.logging.info("\t--Valid Samples: {}".format(len(self.samples)))
+		print(f"\t--crop_size: {CROP_SIZE} | resize: {RESIZE_SIZE}")
+		print("\t--Valid Samples: {}".format(len(self.samples)))
 
 	def __getitem__(self,index):
 		# Prepare training sample paths
