@@ -19,7 +19,11 @@ import torch.nn.functional as fnn
 ##########################
 ### Training loses for GFM
 ##########################
-def get_crossentropy_loss(output_class, gt,pre):	
+def get_crossentropy_loss(output_class, gt, pre):	
+	# print("gt.min():", gt.min())
+	# print("gt.max():", gt.max())
+	# print("pre.min():", pre.min())
+	# print("pre.max():", pre.max())
 	gt_copy = gt.clone()
 	if output_class==2:
 		gt_copy[gt_copy<255]=0
@@ -30,6 +34,8 @@ def get_crossentropy_loss(output_class, gt,pre):
 		gt_copy[gt_copy>2] = 1
 	gt_copy = gt_copy.long()
 	gt_copy = gt_copy[:,0,:,:]
+	# print("gt_copy.min():", gt_copy.min())
+	# print("gt_copy.max():", gt_copy.max())
 	criterion = nn.CrossEntropyLoss()
 	entropy_loss = criterion(pre, gt_copy)
 	return entropy_loss
