@@ -27,7 +27,7 @@ class Kong_args():
 		self.cuda         		= False
 		self.backbone           = "r34_2b"
 		self.rosta              = "TT"
-		self.model_path         = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/core/models/pretrained/gfm_r34_2b_tt.pth"
+		self.model_path         = "GFM/core/models/pretrained/gfm_r34_2b_tt.pth"
 		self.pred_choice        = 3
 		self.dataset_choice     = "SAMPLES"
 		self.test_choice        = "HYBRID"
@@ -40,7 +40,7 @@ class Rebar_args():
 		self.cuda        	    = True
 		self.backbone           = "r34"
 		self.rosta              = "TT"
-		self.model_path         = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/models/trained/kong_trainckpt_epoch4000.pth"
+		self.model_path         = "models/trained/kong_trainckpt_epoch4000.pth"
 		self.pred_choice        = 3
 		self.dataset_choice     = "SAMPLES"
 		self.test_choice        = "HYBRID"

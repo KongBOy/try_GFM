@@ -58,7 +58,7 @@ class Rebar_args():
 		self.dataset_using   = "Rebar"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = "C:/Users/HP820G1/Desktop/img_matting_try/GFM/models/trained/kong_trainckpt_epoch4000.pth"
+		self.checkpoint_path = "models/trained/kong_trainckpt_epoch4000.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
