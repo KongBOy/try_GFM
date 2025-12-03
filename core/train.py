@@ -205,12 +205,15 @@ def train(args, model, optimizer, train_loader, epoch):
 			else:
 				print("GFM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Global:{:.5f} Local:{:.5f} Fusion-alpha:{:.5f} Fusion-comp:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_global.item(), loss_local.item(), loss_fusion_alpha.item(), loss_fusion_comp.item(),speed, exp_time))
 			
-def save_last_checkpoint(args, model):
+def save_last_checkpoint(args, model, optimizer, epoch):
+	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 	print('=====> Saving best model',str(args.epoch))
 	create_folder_if_not_exists(args.model_save_dir)
 	model_out_path = "{}ckpt_epoch{}.pth".format(args.model_save_dir, args.epoch)
-	torch.save(model.state_dict(), model_out_path)
-	args.logging.info("Checkpoint saved to {}".format(model_out_path))
+	torch.save({'model_state_dict'    : model.state_dict(),
+				'optimizer_state_dict': optimizer.state_dict(),
+				'epoch'				  : epoch} , model_out_path)
+	print("Checkpoint saved to {}".format(model_out_path))
 
 def main():
 	# args = get_args()
@@ -251,14 +254,23 @@ def main():
 	model, start_epoch = load_model(args)
 	logging.info('===> Initialize optimizer')
 	optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr)
+
+	### 自己加入的 可以reload上次的結果繼續訓練
+	if(args.load_pretrained_model):
+		checkpoint = torch.load(args.checkpoint_path, map_location=torch.device(args.device))
+		model    .load_state_dict(checkpoint['model_state_dict'])
+		optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+		start_epoch = checkpoint['epoch'] + 1
+		print(f"Resuming from epoch {start_epoch}")
+
 	now = datetime.datetime.now()
 	# training
 	for epoch in range(start_epoch, args.nEpochs + 1):
-		print(f'Train on Epoch: {epoch}')
+		# print(f'Train on Epoch: {epoch}')
 		train(args, model, optimizer, train_loader, epoch)
 		args.epoch = epoch
-
-	save_last_checkpoint(args, model)
+	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
+	save_last_checkpoint(args, model, optimizer, epoch)
 
 if __name__ == "__main__":
 	start_time = time.time()

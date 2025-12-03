@@ -311,12 +311,12 @@ def load_model_and_deploy(args):
 	if torch.cuda.device_count()==0:
 		print(f'Running on CPU...')
 		args.cuda = False
-		ckpt = torch.load(args.model_path,map_location=torch.device('cpu'))
+		ckpt = torch.load(args.model_path, map_location=torch.device('cpu'))
 	else:
 		print(f'Running on GPU with CUDA as {args.cuda}...')
 		ckpt = torch.load(args.model_path)
 
-	model.load_state_dict(ckpt, strict=True)
+	model.load_state_dict(ckpt['model_state_dict'], strict=True)
 	if args.cuda:
 		model = model.cuda()
 
