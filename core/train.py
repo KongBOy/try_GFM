@@ -44,7 +44,7 @@ class Kong_args():
 class Rebar_args():
 	def __init__(self):
 		self.gpuNums         = 1
-		self.nEpochs         = 9500
+		self.nEpochs         = 10000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
