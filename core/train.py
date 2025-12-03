@@ -303,4 +303,8 @@ if __name__ == "__main__":
 	cost_time = end_time - start_time
 	print("start_time:", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(start_time)))
 	print("end_time  :", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(end_time)))
-	print("cost_time :", cost_time / 60 , "min, ", cost_time % 60, "sec")
+	sec  = cost_time % 60
+	min  = cost_time // 60
+	hour = min // 60
+	min  = min % 60
+	print(f"cost_time :{hour}:{min}:{sec}")
