@@ -120,7 +120,7 @@ def train(args, model, optimizer, train_loader, epoch):
 	t0 = time.time()
 
 	loss_each_epoch=[]
-	print("===============================")
+	# print("===============================")
 	for iteration, batch in enumerate(train_loader, 1):
 		torch.cuda.empty_cache()
 		batch_new = []
