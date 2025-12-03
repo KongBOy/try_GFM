@@ -44,7 +44,7 @@ class Kong_args():
 class Rebar_args():
 	def __init__(self):
 		self.gpuNums         = 1
-		self.nEpochs         = 9500
+		self.nEpochs         = 10000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -56,9 +56,31 @@ class Rebar_args():
 		self.model_save_dir  = "models/trained/kong_train"
 		self.logname         = "train_log"
 		self.dataset_using   = "Rebar"
+		self.ksize			 = 25  ### 發現 trimap 完全沒有 白色mask, 只剩 灰色不確定區域 和 黑色不是區域
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "models/trained/kong_trainckpt_epoch4000.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+class Rebar_args_ksize5():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
@@ -120,7 +142,7 @@ def train(args, model, optimizer, train_loader, epoch):
 	t0 = time.time()
 
 	loss_each_epoch=[]
-	print("===============================")
+	# print("===============================")
 	for iteration, batch in enumerate(train_loader, 1):
 		torch.cuda.empty_cache()
 		batch_new = []
@@ -218,7 +240,8 @@ def save_last_checkpoint(args, model, optimizer, epoch):
 def main():
 	# args = get_args()
 	# args = Kong_args()
-	args = Rebar_args()
+	# args = Rebar_args()
+	args = Rebar_args_ksize5()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
@@ -280,4 +303,8 @@ if __name__ == "__main__":
 	cost_time = end_time - start_time
 	print("start_time:", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(start_time)))
 	print("end_time  :", time.strftime('%Y/%m/%d %H:%M:%S',time.localtime(end_time)))
-	print("cost_time :", cost_time / 60 , "min, ", cost_time % 60, "sec")
+	sec  = cost_time % 60
+	min  = cost_time // 60
+	hour = min // 60
+	min  = min % 60
+	print(f"cost_time :{hour}:{min}:{sec}")

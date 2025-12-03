@@ -47,6 +47,19 @@ class Rebar_args():
 		self.test_result_dir    = ""
 		self.logname            = "test_log"
 
+class Rebar_args_ksize5():
+	def __init__(self):
+		self.cuda        	    = False
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.model_path         = "models/trained/kong_train_ksize5/ckpt_epoch500.pth"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.test_result_dir    = "ksize5"
+		self.logname            = "test_log"
+
 def get_args():
 	
 	parser = argparse.ArgumentParser(description='Arguments for the testing purpose.')	
@@ -251,15 +264,17 @@ def test_am2k(args, model):
 
 
 def test_samples(args, model):
+	result_mask_dir = f"{REPOSITORY_ROOT_PATH}result/{args.test_result_dir}/mask"
+	result_img_dir  = f"{REPOSITORY_ROOT_PATH}result/{args.test_result_dir}/img"
 
 	print(f'=====> Test on samples and save alpha, color results')
 	model.eval()
 	pred_choice = args.pred_choice
 
 	img_list = listdir_nohidden(SAMPLES_ORIGINAL_PATH)
-	refresh_folder(SAMPLES_RESULT_ALPHA_PATH)
+	refresh_folder(result_mask_dir)
 	if pred_choice==3:
-		refresh_folder(SAMPLES_RESULT_COLOR_PATH)
+		refresh_folder(result_img_dir)
 
 	for img_name in tqdm(img_list):
 		img_path = SAMPLES_ORIGINAL_PATH+img_name
@@ -286,14 +301,14 @@ def test_samples(args, model):
 			
 		if pred_choice==3:
 			composite = generate_composite_img(img, predict)
-			cv2.imwrite(os.path.join(SAMPLES_RESULT_COLOR_PATH, extract_pure_name(img_name)+'.png'),composite)
+			cv2.imwrite(os.path.join(result_img_dir, extract_pure_name(img_name)+'.png'),composite)
 			predict = predict*255.0
-			cv2.imwrite(os.path.join(SAMPLES_RESULT_ALPHA_PATH, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
+			cv2.imwrite(os.path.join(result_mask_dir, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
 		if pred_choice==2:
 			predict = predict*255.0
-			cv2.imwrite(os.path.join(SAMPLES_RESULT_ALPHA_PATH, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
+			cv2.imwrite(os.path.join(result_mask_dir, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
 		else:
-			cv2.imwrite(os.path.join(SAMPLES_RESULT_ALPHA_PATH, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
+			cv2.imwrite(os.path.join(result_mask_dir, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
 
 
 def load_model_and_deploy(args):
@@ -333,7 +348,8 @@ def load_model_and_deploy(args):
 
 if __name__ == '__main__':
 	# args = get_args()
-	args = Rebar_args()
+	# args = Rebar_args()
+	args = Rebar_args_ksize5()
 	load_model_and_deploy(args)
 
 
