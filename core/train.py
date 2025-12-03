@@ -56,9 +56,31 @@ class Rebar_args():
 		self.model_save_dir  = "models/trained/kong_train"
 		self.logname         = "train_log"
 		self.dataset_using   = "Rebar"
+		self.ksize			 = 25  ### 發現 trimap 完全沒有 白色mask, 只剩 灰色不確定區域 和 黑色不是區域
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "models/trained/kong_trainckpt_epoch4000.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+class Rebar_args_ksize5():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 

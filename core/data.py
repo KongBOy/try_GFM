@@ -89,7 +89,7 @@ class MattingTransform(object):
 #########################
 class MattingDataset(torch.utils.data.Dataset):
 	def __init__(self, args, transform):
-		
+		self.args = args
 		self.samples=[]
 		self.transform = transform
 		self.logging = args.logging
@@ -130,8 +130,8 @@ class MattingDataset(torch.utils.data.Dataset):
 		elif self.BG_CHOICE == 'coco':
 			ori, fg, bg = generate_composite_coco(fg, bg, mask)
 		# Generate trimap/dilation/erosion online
-		kernel_size_tt = 25
-		kernel_size_ftbt = 50
+		kernel_size_tt = self.args.ksize
+		kernel_size_ftbt = self.args.ksize * 2
 		trimap = gen_trimap_with_dilate(mask, kernel_size_tt)
 		dilation = gen_dilate(mask, kernel_size_ftbt)
 		erosion = gen_erosion(mask, kernel_size_ftbt)
