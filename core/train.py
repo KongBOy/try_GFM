@@ -101,7 +101,7 @@ def load_model(args):
 	print("\t--BG choice: {}".format(args.bg_choice))
 	print("\t--FG generate method: {}".format(args.fg_generate))
 	print("\t--Denoise choice: {}".format(args.rssn_denoise))
-	model = GFM(args)
+	model = GFM(args).to(args.device)
 	start_epoch = 1
 	return model, start_epoch
 
@@ -113,7 +113,9 @@ def format_second(secs):
 	return ss    
 
 def train(args, model, optimizer, train_loader, epoch):
-	model = torch.nn.DataParallel(model).cuda()
+	### 這邊chatgpt說 整個丟入 GPU 在 多 worker的情況下可能會出事, 所以我改成下面 item = Variable(item).to(args.device) 這邊 放GPU這樣子
+	# model = torch.nn.DataParallel(model).to(args.device)
+	model = torch.nn.DataParallel(model)
 	model.train()
 	t0 = time.time()
 
@@ -123,7 +125,7 @@ def train(args, model, optimizer, train_loader, epoch):
 		torch.cuda.empty_cache()
 		batch_new = []
 		for item in batch:
-			item = Variable(item).cuda()
+			item = Variable(item).to(args.device)
 			batch_new.append(item)
 		[ori, mask, fg, bg, trimap, dilation, erosion, dilation_subtraction, erosion_subtraction] = batch_new
 		# print("                 ori.min()):", ori.min())  ### 0
@@ -158,15 +160,15 @@ def train(args, model, optimizer, train_loader, epoch):
 			loss_global_bt = get_crossentropy_loss(2, dilation, predict_global_bt)
 			loss_global_ft = get_crossentropy_loss(2, erosion, predict_global_ft)
 
-			loss_local_tt = get_alpha_loss(predict_local_tt, mask, trimap) + get_laplacian_loss(predict_local_tt, mask, trimap)
-			loss_local_bt = get_alpha_loss(predict_local_bt, dilation_subtraction, trimap)+ get_laplacian_loss(predict_local_bt, dilation_subtraction, trimap)
-			loss_local_ft = get_alpha_loss(predict_local_ft, erosion_subtraction, trimap)+ get_laplacian_loss(predict_local_ft, erosion_subtraction, trimap)
+			loss_local_tt = get_alpha_loss(predict_local_tt, mask				 , trimap, args) + get_laplacian_loss(predict_local_tt, mask				, trimap, args)
+			loss_local_bt = get_alpha_loss(predict_local_bt, dilation_subtraction, trimap, args) + get_laplacian_loss(predict_local_bt, dilation_subtraction, trimap, args)
+			loss_local_ft = get_alpha_loss(predict_local_ft, erosion_subtraction , trimap, args) + get_laplacian_loss(predict_local_ft, erosion_subtraction , trimap, args)
 
-			loss_final_tt = get_alpha_loss_whole_img(predict_fusion_tt, mask) + get_laplacian_loss_whole_img(predict_fusion_tt, mask)+get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_tt)
-			loss_final_bt = get_alpha_loss_whole_img(predict_fusion_bt, mask) + get_laplacian_loss_whole_img(predict_fusion_bt, mask)+get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_bt)
-			loss_final_ft = get_alpha_loss_whole_img(predict_fusion_ft, mask) + get_laplacian_loss_whole_img(predict_fusion_ft, mask)+get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_ft)
+			loss_final_tt = get_alpha_loss_whole_img(predict_fusion_tt, mask, args) + get_laplacian_loss_whole_img(predict_fusion_tt, mask, args) + get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_tt, args)
+			loss_final_bt = get_alpha_loss_whole_img(predict_fusion_bt, mask, args) + get_laplacian_loss_whole_img(predict_fusion_bt, mask, args) + get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_bt, args)
+			loss_final_ft = get_alpha_loss_whole_img(predict_fusion_ft, mask, args) + get_laplacian_loss_whole_img(predict_fusion_ft, mask, args) + get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion_ft, args)
 
-			loss_final = get_alpha_loss_whole_img(predict_fusion, mask) + get_laplacian_loss_whole_img(predict_fusion, mask)+get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion)
+			loss_final    = get_alpha_loss_whole_img(predict_fusion   , mask, args) + get_laplacian_loss_whole_img(predict_fusion   , mask, args) + get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion   , args)
 
 			loss_tt = loss_global_tt+loss_local_tt+loss_final_tt
 			loss_bt = loss_global_bt+loss_local_bt+loss_final_bt
@@ -177,16 +179,16 @@ def train(args, model, optimizer, train_loader, epoch):
 
 			if args.rosta=='TT':
 				loss_global =get_crossentropy_loss(3, trimap, predict_global)
-				loss_local = get_alpha_loss(predict_local, mask, trimap) + get_laplacian_loss(predict_local, mask, trimap)
+				loss_local = get_alpha_loss(predict_local, mask  			   , trimap, args) + get_laplacian_loss(predict_local, mask				  , trimap, args)
 			elif args.rosta=='FT':
 				loss_global =get_crossentropy_loss(2, dilation, predict_global)
-				loss_local = get_alpha_loss(predict_local, erosion_subtraction, trimap) + get_laplacian_loss(predict_local, erosion_subtraction, trimap)
+				loss_local = get_alpha_loss(predict_local, erosion_subtraction , trimap, args) + get_laplacian_loss(predict_local, erosion_subtraction, trimap, args)
 			else:
 				loss_global =get_crossentropy_loss(2, mask, predict_global)
-				loss_local = get_alpha_loss(predict_local, dilation_subtraction, trimap) + get_laplacian_loss(predict_local, dilation_subtraction, trimap)
+				loss_local = get_alpha_loss(predict_local, dilation_subtraction, trimap, args) + get_laplacian_loss(predict_local, dilation_subtraction, trimap, args)
 
-			loss_fusion_alpha = get_alpha_loss_whole_img(predict_fusion, mask) + get_laplacian_loss_whole_img(predict_fusion, mask)
-			loss_fusion_comp = get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion)
+			loss_fusion_alpha = get_alpha_loss_whole_img(predict_fusion, mask, args) + get_laplacian_loss_whole_img(predict_fusion, mask, args)
+			loss_fusion_comp  = get_composition_loss_whole_img(ori, mask, fg, bg, predict_fusion, args)
 			loss = 0.25*loss_global+0.25*loss_local+0.25*loss_fusion_alpha+0.25*loss_fusion_comp
 		
 		loss.backward()
@@ -222,8 +224,8 @@ def main():
 	logging.info("===============================")
 	logging.info(f"===> Loading args\n{args}")
 	logging.info("===> Environment init")
-	if not torch.cuda.is_available():
-		raise Exception("No GPU and cuda available, please try again")
+	# if not torch.cuda.is_available():
+	# 	raise Exception("No GPU and cuda available, please try again")
 	
 	# Check for flag --fg_generate and --rssn_denoise.
 	# if you use --rssn_denoise, you have to use fg_generate=closed_form

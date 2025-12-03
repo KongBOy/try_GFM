@@ -40,21 +40,19 @@ def get_crossentropy_loss(output_class, gt, pre):
 	entropy_loss = criterion(pre, gt_copy)
 	return entropy_loss
 
-def get_alpha_loss(predict, alpha, trimap):
-	weighted = torch.zeros(trimap.shape).cuda()
+def get_alpha_loss(predict, alpha, trimap, args):
+	weighted = torch.zeros(trimap.shape).to(args.device)
 	weighted[trimap == 128] = 1.
 	alpha_f = alpha / 255.
-	alpha_f = alpha_f.cuda()
 	diff = predict - alpha_f
 	diff = diff * weighted
 	alpha_loss = torch.sqrt(diff ** 2 + 1e-12)
 	alpha_loss_weighted = alpha_loss.sum() / (weighted.sum() + 1.)
 	return alpha_loss_weighted
 
-def get_alpha_loss_whole_img(predict, alpha):
-	weighted = torch.ones(alpha.shape).cuda()
+def get_alpha_loss_whole_img(predict, alpha, args):
+	weighted = torch.ones(alpha.shape).to(args.device)
 	alpha_f = alpha / 255.
-	alpha_f = alpha_f.cuda()
 	diff = predict - alpha_f
 	alpha_loss = torch.sqrt(diff ** 2 + 1e-12)
 	alpha_loss = alpha_loss.sum()/(weighted.sum())
@@ -62,7 +60,7 @@ def get_alpha_loss_whole_img(predict, alpha):
 
 ## Laplacian loss is refer to 
 ## https://gist.github.com/MarcoForte/a07c40a2b721739bb5c5987671aa5270
-def build_gauss_kernel(size=5, sigma=1.0, n_channels=1, cuda=False):
+def build_gauss_kernel(size=5, sigma=1.0, n_channels=1, args=None):
 	if size % 2 != 1:
 		raise ValueError("kernel size must be uneven")
 	grid = np.float32(np.mgrid[0:size,0:size].T)
@@ -70,7 +68,7 @@ def build_gauss_kernel(size=5, sigma=1.0, n_channels=1, cuda=False):
 	kernel = np.sum(gaussian(grid), axis=2)
 	kernel /= np.sum(kernel)
 	kernel = np.tile(kernel, (n_channels, 1, 1))
-	kernel = torch.FloatTensor(kernel[:, None, :, :]).cuda()
+	kernel = torch.FloatTensor(kernel[:, None, :, :]).to(args.device)
 	return Variable(kernel, requires_grad=False)
 
 def conv_gauss(img, kernel):
@@ -90,30 +88,28 @@ def laplacian_pyramid(img, kernel, max_levels=5):
 	pyr.append(current)
 	return pyr
 
-def get_laplacian_loss(predict, alpha, trimap):
-	weighted = torch.zeros(trimap.shape).cuda()
+def get_laplacian_loss(predict, alpha, trimap, args):
+	weighted = torch.zeros(trimap.shape).to(args.device)
 	weighted[trimap == 128] = 1.
 	alpha_f = alpha / 255.
-	alpha_f = alpha_f.cuda()
 	alpha_f = alpha_f.clone()*weighted
 	predict = predict.clone()*weighted
-	gauss_kernel = build_gauss_kernel(size=5, sigma=1.0, n_channels=1, cuda=True)
+	gauss_kernel = build_gauss_kernel(size=5, sigma=1.0, n_channels=1, args=args)
 	pyr_alpha  = laplacian_pyramid(alpha_f, gauss_kernel, 5)
 	pyr_predict = laplacian_pyramid(predict, gauss_kernel, 5)
 	laplacian_loss_weighted = sum(fnn.l1_loss(a, b) for a, b in zip(pyr_alpha, pyr_predict))
 	return laplacian_loss_weighted
 
-def get_laplacian_loss_whole_img(predict, alpha):
+def get_laplacian_loss_whole_img(predict, alpha, args):
 	alpha_f = alpha / 255.
-	alpha_f = alpha_f.cuda()
-	gauss_kernel = build_gauss_kernel(size=5, sigma=1.0, n_channels=1, cuda=True)
+	gauss_kernel = build_gauss_kernel(size=5, sigma=1.0, n_channels=1, args=args)
 	pyr_alpha  = laplacian_pyramid(alpha_f, gauss_kernel, 5)
 	pyr_predict = laplacian_pyramid(predict, gauss_kernel, 5)
 	laplacian_loss = sum(fnn.l1_loss(a, b) for a, b in zip(pyr_alpha, pyr_predict))
 	return laplacian_loss
 
-def get_composition_loss_whole_img(img, alpha, fg, bg, predict):
-	weighted = torch.ones(alpha.shape).cuda()
+def get_composition_loss_whole_img(img, alpha, fg, bg, predict, args):
+	weighted = torch.ones(alpha.shape).to(args.device)
 	predict_3 = torch.cat((predict, predict, predict), 1)
 	comp = predict_3 * fg + (1. - predict_3) * bg
 	comp_loss = torch.sqrt((comp - img) ** 2 + 1e-12) / 255.

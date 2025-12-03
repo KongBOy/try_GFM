@@ -77,9 +77,8 @@ def collaborative_matting(rosta, glance_sigmoid, focus_sigmoid):
 		fg_mask = index.clone()
 		fg_mask[fg_mask==1]=0
 		fg_mask[fg_mask==2]=1
-		focus_sigmoid = focus_sigmoid.cpu()
-		trimap_mask = trimap_mask.cpu()
-		fg_mask = fg_mask.cpu()
+		focus_sigmoid = focus_sigmoid
+		trimap_mask = trimap_mask
 		fusion_sigmoid = focus_sigmoid*trimap_mask+fg_mask
 	elif rosta == 'BT':
 		values, index = torch.max(glance_sigmoid,1)
@@ -91,7 +90,7 @@ def collaborative_matting(rosta, glance_sigmoid, focus_sigmoid):
 		index = index[:,None,:,:].float()
 		fusion_sigmoid = index + focus_sigmoid
 		fusion_sigmoid[fusion_sigmoid>1]=1
-	fusion_sigmoid = fusion_sigmoid.cuda()
+	fusion_sigmoid = fusion_sigmoid
 	return fusion_sigmoid
 
 def get_masked_local_from_global_test(global_result, local_result):
