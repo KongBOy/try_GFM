@@ -240,7 +240,8 @@ def save_last_checkpoint(args, model, optimizer, epoch):
 def main():
 	# args = get_args()
 	# args = Kong_args()
-	args = Rebar_args()
+	# args = Rebar_args()
+	args = Rebar_args_ksize5()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
