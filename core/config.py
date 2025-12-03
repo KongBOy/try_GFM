@@ -11,9 +11,9 @@ Paper link (Arxiv): https://arxiv.org/abs/2010.16188
 
 ########## Root Paths and logging files paths
 REPOSITORY_ROOT_PATH = 'Rebar/'
-REBAR_DATASET_ROOT_PATH = 'C:/Users/HP820G1/Desktop/img_matting_try/Rebar/'
-AM2K_DATASET_ROOT_PATH  = 'C:/Users/HP820G1/Desktop/img_matting_try/AM-2k/'
-BG20K_DATASET_ROOT_PATH = 'C:/Users/HP820G1/Desktop/img_matting_try/BG-20k/'
+REBAR_DATASET_ROOT_PATH = '../Rebar/'
+AM2K_DATASET_ROOT_PATH  = '../AM-2k/'
+BG20K_DATASET_ROOT_PATH = '../BG-20k/'
 COCO_DATASET_ROOT_PATH = ''
 
 TRAIN_LOGS_FOLDER = REPOSITORY_ROOT_PATH+'logs/train_logs/'
