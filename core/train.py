@@ -140,7 +140,7 @@ def train(args, model, optimizer, train_loader, epoch):
 		# print("              trimap.max()):", trimap.max())  ### 255
 		# print("            dilation.min()):", dilation.min())  ### 0
 		# print("            dilation.max()):", dilation.max())  ### 255
-		# print("             erosion.min()):", erosion.min())  ### 0
+		# print("             erosion.min()):", erosion.min())  ### 0, 鋼筋太細了
 		# print("             erosion.max()):", erosion.max())  ### 0
 		# print("dilation_subtraction.min()):", dilation_subtraction.min())  ### 0
 		# print("dilation_subtraction.max()):", dilation_subtraction.max())  ### 255
