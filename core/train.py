@@ -97,8 +97,9 @@ class Rebar_args_ksize5():
 ### 2025/12/04/星期四
 class Rebar_args_ksize5_fixSize():
 	def __init__(self):
+		model_name 	         = "ksize5_fixSize"
 		self.gpuNums         = 1
-		self.nEpochs         = 500
+		self.nEpochs         = 4000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -107,7 +108,7 @@ class Rebar_args_ksize5_fixSize():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.model_save_dir  = f"models/trained/{model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Rebar"
@@ -116,12 +117,13 @@ class Rebar_args_ksize5_fixSize():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/04/星期四
 class Rebar_args_ksize5_fixSize_CenterCrop():
 	def __init__(self):
+		model_name 	         = "ksize5_fixSize_CenterCrop"
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
@@ -132,7 +134,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.model_save_dir  = f"models/trained/{model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Rebar"
@@ -141,13 +143,14 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.crop_method     = "Center"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 ### 2025/12/04/星期四
 class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
+		model_name 	         = "ksize5_HaveSmallSize_CenterCrop"
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
@@ -158,7 +161,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.model_save_dir  = f"models/trained/{model_name}/"
 		self.logname         = "train_log"
 
 
@@ -168,7 +171,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.crop_method     = "center"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch14000.pth"
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
