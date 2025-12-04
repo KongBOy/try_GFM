@@ -65,7 +65,7 @@ class Rebar_args():
 class Rebar_args_ksize5():
 	def __init__(self):
 		self.gpuNums         = 1
-		self.nEpochs         = 500
+		self.nEpochs         = 15000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -79,8 +79,8 @@ class Rebar_args_ksize5():
 		self.dataset_using   = "Rebar"
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 
-		self.load_pretrained_model = False
-		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.load_pretrained_model = True
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch14000.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
@@ -307,4 +307,4 @@ if __name__ == "__main__":
 	min  = cost_time // 60
 	hour = min // 60
 	min  = min % 60
-	print(f"cost_time :{hour}:{min}:{sec}")
+	print(f"cost_time :{int(hour)}:{int(min)}:{sec}")
