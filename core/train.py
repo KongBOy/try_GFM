@@ -122,7 +122,7 @@ class Rebar_args_ksize5_r34_2b():
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-### 2025/12/04/星期四
+### 2025/12/04/星期四 JoeRoom
 class Rebar_args_ksize5_fixSize():
 	def __init__(self):
 		model_name 	         = "ksize5_fixSize"
