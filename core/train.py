@@ -83,6 +83,27 @@ class Rebar_args_ksize5():
 		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+class Rebar_args_ksize5_r34_2b():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34_2b"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 ######### Parsing arguments ######### 
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments for the training purpose.')
@@ -241,7 +262,8 @@ def main():
 	# args = get_args()
 	# args = Kong_args()
 	# args = Rebar_args()
-	args = Rebar_args_ksize5()
+	# args = Rebar_args_ksize5()
+	args = Rebar_args_ksize5_r34_2b()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
@@ -307,4 +329,4 @@ if __name__ == "__main__":
 	min  = cost_time // 60
 	hour = min // 60
 	min  = min % 60
-	print(f"cost_time :{hour}:{min}:{sec}")
+	print(f"cost_time :{int(hour)}:{int(min)}:{sec}")
