@@ -180,7 +180,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
 		model_name 	         = "ksize5_HaveSmallSize_CenterCrop"
 		self.gpuNums         = 1
-		self.nEpochs         = 4000
+		self.nEpochs         = 10500
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -198,8 +198,8 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.kong_CROP_SIZE  = [kong_size * 40 for kong_size in range(1, 20)]
 		self.crop_method     = "center"
 
-		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch10360.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
