@@ -95,8 +95,10 @@ class Rebar_args_ksize5():
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+### 2025/12/03/星期三 HP820G1
 class Rebar_args_ksize5_r34_2b():
 	def __init__(self):
+		model_name 	         = "ksize5_r34_2b"
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
@@ -107,7 +109,7 @@ class Rebar_args_ksize5_r34_2b():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.model_save_dir  = f"models/trained/{model_name}/"
 		self.logname         = "train_log"
 		
 		self.dataset_using   = "Rebar"
@@ -355,18 +357,15 @@ def save_last_checkpoint(args, model, optimizer, epoch):
 	print("Checkpoint saved to {}".format(model_out_path))
 
 def main():
-	# args = get_args()
+	args = get_args()
 	# args = Kong_args()
 	# args = Rebar_args()
-<<<<<<< HEAD
 	# args = Rebar_args_ksize5()
-	args = Rebar_args_ksize5_r34_2b()
-=======
-	# args = Rebar_args_ksize5()  	### 2025/12/03/星期三, 發現 crop的影響真的很大
-	args = Rebar_args_ksize5_fixSize()
+	# args = Rebar_args_ksize5_r34_2b()   ### 2025/12/03/三, HP820G1 好大要訓練好久
+	# args = Rebar_args_ksize5()  	      ### 2025/12/03/三, JoeRoom 發現 crop的影響真的很大
+	# args = Rebar_args_ksize5_fixSize()  ### 2025/12/04/四, JoeRoom training
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
->>>>>>> c2a1e02b076aeabcf24e622286cd184893aa8c1f
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
