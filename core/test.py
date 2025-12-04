@@ -53,11 +53,62 @@ class Rebar_args_ksize5():
 		# self.cuda        	    = True
 		self.backbone           = "r34"
 		self.rosta              = "TT"
-		self.model_path         = "models/trained/kong_train_ksize5/ckpt_epoch500.pth"
+		self.model_path         = "models/trained/kong_train_ksize5/ckpt_epoch15000.pth"
 		self.pred_choice        = 3
 		self.dataset_choice     = "SAMPLES"
 		self.test_choice        = "HYBRID"
-		self.test_result_dir    = "ksize5"
+		self.test_result_dir    = "ksize5_epoch15000x5.0"
+		self.logname            = "test_log"
+
+### 2025/12/04/星期四 JoeRoom
+class Rebar_args_ksize5_fixSize():
+	def __init__(self):
+		self.cuda        	    = False
+		model_name 	            = "ksize5_fixSize"
+		self.epoch 			    = 0
+		self.test_result_dir    = f"{model_name}_x5.0"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/04/星期四
+class Rebar_args_ksize5_fixSize_CenterCrop():
+	def __init__(self):
+		self.cuda        	    = False
+		model_name 	            = "ksize5_fixSize_CenterCrop"
+		self.epoch 			    = 0
+		self.test_result_dir    = f"{model_name}_x5.0"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/04/星期四 HP820G1
+class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
+	def __init__(self):
+		self.cuda        	    = False
+		model_name 	            = "ksize5_HaveSmallSize_CenterCrop"
+		self.epoch 			    = 0
+		self.test_result_dir    = f"{model_name}_x5.0"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
 		self.logname            = "test_log"
 
 def get_args():
@@ -349,7 +400,10 @@ def load_model_and_deploy(args):
 if __name__ == '__main__':
 	# args = get_args()
 	# args = Rebar_args()
-	args = Rebar_args_ksize5()
+	# args = Rebar_args_ksize5()
+	# args = Rebar_args_ksize5_fixSize()
+	# args = Rebar_args_ksize5_fixSize_CenterCrop()
+	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	load_model_and_deploy(args)
 
 
