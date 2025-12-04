@@ -8,3 +8,7 @@ tensorboard/*
 *.json
 *.log
 core/temp.py
+logs/*
+Rebar/result/*
+samples/result_alpha/*
+samples/result_color/*
