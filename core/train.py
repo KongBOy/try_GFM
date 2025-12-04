@@ -175,7 +175,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-### 2025/12/04/星期四
+### 2025/12/04/星期四 HP820G1
 class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
 		model_name 	         = "ksize5_HaveSmallSize_CenterCrop"
