@@ -22,8 +22,11 @@ import torch.nn.functional as fnn
 def get_crossentropy_loss(output_class, gt, pre):	
 	# print("gt.min():", gt.min())
 	# print("gt.max():", gt.max())
+	# print("gt.shape:", gt.shape)
+
 	# print("pre.min():", pre.min())
 	# print("pre.max():", pre.max())
+	# print("pre.shape:", pre.shape)
 	gt_copy = gt.clone()
 	if output_class==2:
 		gt_copy[gt_copy<255]=0

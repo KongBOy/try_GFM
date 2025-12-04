@@ -30,8 +30,9 @@ import matplotlib.pyplot as plt
 ## Data transformer
 #########################
 class MattingTransform(object):
-	def __init__(self):
+	def __init__(self, args):
 		super(MattingTransform, self).__init__()
+		self.args = args
 
 	def __call__(self, *argv):
 		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
@@ -48,24 +49,38 @@ class MattingTransform(object):
 		# plt.show()
 		ori = argv[0]
 		h, w, c = ori.shape
-		rand_ind = random.randint(0, len(CROP_SIZE) - 1)
-		crop_size = CROP_SIZE[rand_ind] if CROP_SIZE[rand_ind]<min(h, w) else 320
+
+		''' 在 trimap == 128 的地方 隨機 crop 影像出來訓練, 原始code 隨機點挑出來後當左上角往右下角crop, 我是覺得 隨機點挑出來當中心點往左右上下crop會更好 '''
+		### CROP_SIZE 是一個 [], 比如 [640, 960, 1280], 這邊試想隨機從裡面挑一個 size出來
+		rand_ind = random.randint(0, len(self.args.kong_CROP_SIZE) - 1)
+		crop_size = self.args.kong_CROP_SIZE[rand_ind] if self.args.kong_CROP_SIZE[rand_ind]<min(h, w) else 320
+
+		### 丟進 model 的大小, 原始code在config.py 裡面設320
 		resize_size = RESIZE_SIZE
-		### generate crop centered in transition area randomly
-		trimap = argv[1]
-		trimap_crop = trimap[:h-crop_size, :w-crop_size]
-		target = np.where(trimap_crop == 128) if random.random() < 0.5 else np.where(trimap_crop > -100)
+		### 可以crop的範圍圈出來
+		trimap = argv[4]
+		if  (self.args.crop_method == "ord_LeftTop"): trimap_crop = trimap[ 			     : h - crop_size      ,     	        : w - crop_size      ]
+		elif(self.args.crop_method == "center"     ): trimap_crop = trimap[ crop_size // 2  : h - crop_size // 2 , crop_size // 2  : w - crop_size // 2 ]
+
+		### 找 trimap == 128 的地方 的座標點, random 的從裡面選一個點 來 crop影像
+		target = np.where(trimap_crop == 128) # if random.random() < 1.0 else np.where(trimap_crop > -100)
+		### 如果 trimap 沒有 == 128的地方, 那就整個 可以crop的範圍內選隨機一點
 		if len(target[0])==0:
 			target = np.where(trimap_crop > -100)
-
 		rand_ind = np.random.randint(len(target[0]), size = 1)[0]
-		cropx, cropy = target[1][rand_ind], target[0][rand_ind]
-		# # flip the samples randomly
+
+		### 隨機選的這一點 設定為左上角 或者為 中心點 為起點,  可以用原版的 左上角當起點往右下角drop, 或者我覺得比較合理的 中心點為起點往上下左右crop
+		if  (self.args.crop_method == "ord_LeftTop"): cropx, cropy = target[1][rand_ind] 				   , target[0][rand_ind] 
+		elif(self.args.crop_method == "center"     ): cropx, cropy = target[1][rand_ind] + crop_size // 2 , target[0][rand_ind] + crop_size // 2 
+
+		### 0.5的機率左右翻轉
 		flip_flag=True if random.random()<0.5 else False
-		# generate samples (crop, flip, resize)
+
+		### 實際去 crop影像 和 翻轉, 最後 resize 成 320
 		argv_transform = []
 		for item in argv:
-			item = item[cropy:cropy+crop_size, cropx:cropx+crop_size]
+			if  (self.args.crop_method == "ord_LeftTop"): item = item[cropy 				   : cropy + crop_size      , cropx 				  : cropx + crop_size	   ]
+			elif(self.args.crop_method == "center"     ): item = item[cropy - crop_size // 2  : cropy + crop_size // 2 , cropx - crop_size // 2  : cropx + crop_size // 2 ]
 			if flip_flag:
 				item = cv2.flip(item, 1)
 			item = cv2.resize(item, (resize_size, resize_size), interpolation=cv2.INTER_LINEAR)
@@ -100,7 +115,7 @@ class MattingDataset(torch.utils.data.Dataset):
 		
 		print('===> Loading training set')
 		self.samples += generate_paths_for_dataset(args)
-		print(f"\t--crop_size: {CROP_SIZE} | resize: {RESIZE_SIZE}")
+		print(f"\t--crop_size: {self.args.kong_CROP_SIZE} | resize: {RESIZE_SIZE}")
 		print("\t--Valid Samples: {}".format(len(self.samples)))
 
 	def __getitem__(self,index):

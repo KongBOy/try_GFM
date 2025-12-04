@@ -41,6 +41,10 @@ class Kong_args():
 		self.logname         = "train_log"
 		self.dataset_using   = "AM2K"
 
+		self.ksize			 = 25  ### 原始動物Dataset用25完全沒問題
+		self.kong_CROP_SIZE  = [640, 960, 1280]
+		self.crop_method     = "ord_LeftTop"
+
 class Rebar_args():
 	def __init__(self):
 		self.gpuNums         = 1
@@ -55,13 +59,17 @@ class Rebar_args():
 		self.rssn_denoise    = False
 		self.model_save_dir  = "models/trained/kong_train"
 		self.logname         = "train_log"
+
 		self.dataset_using   = "Rebar"
 		self.ksize			 = 25  ### 發現 trimap 完全沒有 白色mask, 只剩 灰色不確定區域 和 黑色不是區域
+		self.kong_CROP_SIZE  = [640, 960, 1280]
+		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "models/trained/kong_trainckpt_epoch4000.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+### 2025/12/03/星期三
 class Rebar_args_ksize5():
 	def __init__(self):
 		self.gpuNums         = 1
@@ -73,11 +81,91 @@ class Rebar_args_ksize5():
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+
+
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [640, 960, 1280]
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+### 2025/12/04/星期四
+class Rebar_args_ksize5_fixSize():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
 		self.model_save_dir  = "models/trained/kong_train_ksize5/"
 		self.logname         = "train_log"
+
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+### 2025/12/04/星期四
+class Rebar_args_ksize5_fixSize_CenterCrop():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
+		self.crop_method     = "Center"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+### 2025/12/04/星期四
+class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
+	def __init__(self):
+		self.gpuNums         = 1
+		self.nEpochs         = 500
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.logname         = "train_log"
+
+
 		self.dataset_using   = "Rebar"
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [kong_size * 40 for kong_size in range(1, 20)]
+		self.crop_method     = "center"
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch14000.pth"
@@ -112,7 +200,7 @@ def get_args():
 	return args
 
 def load_dataset(args):
-	train_transform = MattingTransform()
+	train_transform = MattingTransform(args)
 	train_set = MattingDataset(args, train_transform)
 	train_loader = DataLoader(dataset=train_set, num_workers=args.threads, batch_size=args.batchSize, shuffle=True)
 	return train_loader
@@ -241,7 +329,10 @@ def main():
 	# args = get_args()
 	# args = Kong_args()
 	# args = Rebar_args()
-	args = Rebar_args_ksize5()
+	# args = Rebar_args_ksize5()  	### 2025/12/03/星期三, 發現 crop的影響真的很大
+	args = Rebar_args_ksize5_fixSize()
+	# args = Rebar_args_ksize5_fixSize_CenterCrop()
+	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
