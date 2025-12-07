@@ -67,9 +67,10 @@ class Rebar_args_ksize5():
 ### 2025/12/04/星期四 JoeRoom
 class Rebar_args_ksize5_fixSize():
 	def __init__(self):
-		self.cuda        	    = False
+		# self.cuda        	    = False
+		self.cuda        	    = True
 		model_name 	            = "ksize5_fixSize"
-		self.epoch 			    = 0
+		self.epoch 			    = 4000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
@@ -84,9 +85,10 @@ class Rebar_args_ksize5_fixSize():
 ### 2025/12/04/星期四
 class Rebar_args_ksize5_fixSize_CenterCrop():
 	def __init__(self):
-		self.cuda        	    = False
+		# self.cuda        	    = False
+		self.cuda        	    = True
 		model_name 	            = "ksize5_fixSize_CenterCrop"
-		self.epoch 			    = 0
+		self.epoch 			    = 5000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
@@ -101,9 +103,10 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 ### 2025/12/04/星期四 HP820G1
 class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
-		self.cuda        	    = False
+		# self.cuda        	    = False
+		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_CenterCrop"
-		self.epoch 			    = 10500
+		self.epoch 			    = 20000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
@@ -406,8 +409,9 @@ if __name__ == '__main__':
 	# args = Rebar_args()
 	args = Rebar_args_ksize5()
 	# args = Rebar_args_ksize5_fixSize()
-	# args = Rebar_args_ksize5_fixSize_CenterCrop()
+	args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
+	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
 	load_model_and_deploy(args)
 
 

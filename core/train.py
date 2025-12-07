@@ -148,12 +148,12 @@ class Rebar_args_ksize5_fixSize():
 		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-### 2025/12/04/星期四
+### 2025/12/04/星期四 JoeRoom
 class Rebar_args_ksize5_fixSize_CenterCrop():
 	def __init__(self):
 		model_name 	         = "ksize5_fixSize_CenterCrop"
 		self.gpuNums         = 1
-		self.nEpochs         = 500
+		self.nEpochs         = 5000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -168,19 +168,19 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.dataset_using   = "Rebar"
 		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
-		self.crop_method     = "Center"
+		self.crop_method     = "center"
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-### 2025/12/04/星期四 HP820G1
+### 2025/12/04/星期四 HP820G1/JoeRoom
 class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
 		model_name 	         = "ksize5_HaveSmallSize_CenterCrop"
 		self.gpuNums         = 1
-		self.nEpochs         = 10500
+		self.nEpochs         = 20000
 		self.lr              = 0.00001
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
@@ -195,11 +195,38 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 
 		self.dataset_using   = "Rebar"
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
-		self.kong_CROP_SIZE  = [kong_size * 40 for kong_size in range(1, 20)]
+		self.kong_CROP_SIZE  = [kong_size * 40 for kong_size in range(1, 20)]  ### [40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600, 640, 680, 720, 760]
 		self.crop_method     = "center"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch10360.pth"
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch10500.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+	
+### 2025/12/04/星期五 JoeRoom
+class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
+	def __init__(self):
+		model_name 	         = "ksize5_HaveSmallSize_CenterCropNotMuch"
+		self.gpuNums         = 1
+		self.nEpochs         = 5000
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.logname         = "train_log"
+
+
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 480]
+		self.crop_method     = "center"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/04/星期四 JoeRoom
@@ -392,7 +419,9 @@ def main():
 	# args = Rebar_args_ksize5_fixSize()  ### 2025/12/04/四, JoeRoom training
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
+	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
 	args = Doc3D_args_ksize5_fixSize()
+	
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
