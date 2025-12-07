@@ -202,6 +202,32 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch10360.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+### 2025/12/04/星期四 JoeRoom
+class Doc3D_args_ksize5_fixSize():
+	def __init__(self):
+		model_name 	         = "Doc3D_ksize5_fixSize"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 16    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 ######### Parsing arguments ######### 
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments for the training purpose.')
@@ -365,7 +391,8 @@ def main():
 	# args = Rebar_args_ksize5()  	      ### 2025/12/03/三, JoeRoom 發現 crop的影響真的很大
 	# args = Rebar_args_ksize5_fixSize()  ### 2025/12/04/四, JoeRoom training
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
-	args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
+	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
+	args = Doc3D_args_ksize5_fixSize()
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
 	print(f'===> Logging to {logging_filename}') 
