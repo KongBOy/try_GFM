@@ -49,15 +49,19 @@ class Rebar_args():
 
 class Rebar_args_ksize5():
 	def __init__(self):
+		''' ord crop [640, 960, 1280], 超過用 320 '''
 		self.cuda        	    = False
 		# self.cuda        	    = True
+		model_name 	            = "ksize5"
+		self.epoch 			    = 15000
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+
 		self.backbone           = "r34"
 		self.rosta              = "TT"
-		self.model_path         = "models/trained/kong_train_ksize5/ckpt_epoch15000.pth"
 		self.pred_choice        = 3
 		self.dataset_choice     = "SAMPLES"
 		self.test_choice        = "HYBRID"
-		self.test_result_dir    = "ksize5_epoch15000x5.0"
 		self.logname            = "test_log"
 
 ### 2025/12/04/星期四 JoeRoom
@@ -66,7 +70,7 @@ class Rebar_args_ksize5_fixSize():
 		self.cuda        	    = False
 		model_name 	            = "ksize5_fixSize"
 		self.epoch 			    = 0
-		self.test_result_dir    = f"{model_name}_x5.0"
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
 		# self.cuda        	    = True
@@ -83,7 +87,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.cuda        	    = False
 		model_name 	            = "ksize5_fixSize_CenterCrop"
 		self.epoch 			    = 0
-		self.test_result_dir    = f"{model_name}_x5.0"
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
 		# self.cuda        	    = True
@@ -99,8 +103,8 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
 		self.cuda        	    = False
 		model_name 	            = "ksize5_HaveSmallSize_CenterCrop"
-		self.epoch 			    = 0
-		self.test_result_dir    = f"{model_name}_x5.0"
+		self.epoch 			    = 10500
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
 		# self.cuda        	    = True
@@ -400,7 +404,7 @@ def load_model_and_deploy(args):
 if __name__ == '__main__':
 	# args = get_args()
 	# args = Rebar_args()
-	# args = Rebar_args_ksize5()
+	args = Rebar_args_ksize5()
 	# args = Rebar_args_ksize5_fixSize()
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
