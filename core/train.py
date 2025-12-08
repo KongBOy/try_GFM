@@ -72,6 +72,7 @@ class Rebar_args():
 ### 2025/12/03/星期三
 class Rebar_args_ksize5():
 	def __init__(self):
+		model_name 	         = "ksize5_CropOrd_LeftTop"
 		self.gpuNums         = 1
 		self.nEpochs         = 15000
 		self.lr              = 0.00001
@@ -81,7 +82,7 @@ class Rebar_args_ksize5():
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
-		self.model_save_dir  = "models/trained/kong_train_ksize5/"
+		self.model_save_dir  = f"models/trained/{model_name}/"
 		self.logname         = "train_log"
 
 
@@ -98,7 +99,7 @@ class Rebar_args_ksize5():
 ### 2025/12/03/星期三 HP820G1
 class Rebar_args_ksize5_r34_2b():
 	def __init__(self):
-		model_name 	         = "ksize5_r34_2b"
+		model_name 	         = "ksize5_CropOrd_LeftTop_r34_2b"
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
@@ -123,9 +124,9 @@ class Rebar_args_ksize5_r34_2b():
 
 
 ### 2025/12/04/星期四 JoeRoom
-class Rebar_args_ksize5_fixSize():
+class Rebar_args_ksize5_fixSize_LeftTop():
 	def __init__(self):
-		model_name 	         = "ksize5_fixSize"
+		model_name 	         = "ksize5_fixSize_LeftTop"
 		self.gpuNums         = 1
 		self.nEpochs         = 4000
 		self.lr              = 0.00001
@@ -416,7 +417,7 @@ def main():
 	# args = Rebar_args_ksize5()
 	# args = Rebar_args_ksize5_r34_2b()   ### 2025/12/03/三, HP820G1 好大要訓練好久
 	# args = Rebar_args_ksize5()  	      ### 2025/12/03/三, JoeRoom 發現 crop的影響真的很大
-	# args = Rebar_args_ksize5_fixSize()  ### 2025/12/04/四, JoeRoom training
+	# args = Rebar_args_ksize5_fixSize_LeftTop()  ### 2025/12/04/四, JoeRoom training
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
