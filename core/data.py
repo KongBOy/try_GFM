@@ -20,7 +20,6 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 import json
-import logging
 import pickle
 from torchvision import transforms
 from torch.autograd import Variable
@@ -107,7 +106,6 @@ class MattingDataset(torch.utils.data.Dataset):
 		self.args = args
 		self.samples=[]
 		self.transform = transform
-		self.logging = args.logging
 		self.BG_CHOICE = args.bg_choice
 		self.backbone = args.backbone
 		self.FG_CF = True if args.fg_generate=='closed_form' else False

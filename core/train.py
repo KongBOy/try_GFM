@@ -512,13 +512,9 @@ def main():
 	args = Doc3D_args_ksize25_HaveSmallSize()
 	
 	now = datetime.datetime.now()
-	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
-	print(f'===> Logging to {logging_filename}') 
-	logging.basicConfig(filename=logging_filename, level=logging.INFO)
-	args.logging = logging
-	logging.info("===============================")
-	logging.info(f"===> Loading args\n{args}")
-	logging.info("===> Environment init")
+	print("===============================")
+	print(f"===> Loading args\n{args}")
+	print("===> Environment init")
 	# if not torch.cuda.is_available():
 	# 	raise Exception("No GPU and cuda available, please try again")
 	
@@ -540,13 +536,13 @@ def main():
 			raise Exception('Either FG_PATH or BG_PATH in AM2K is not exist, please correct or try training with --fg_generate=alpha_blending instead.')
 
 	args.gpuNums = torch.cuda.device_count()
-	logging.info(f'Running with GPUs and the number of GPUs: {args.gpuNums}')
+	print(f'Running with GPUs and the number of GPUs: {args.gpuNums}')
 	train_loader = load_dataset(args)
-	logging.info('===> Building the model')
+	print('===> Building the model')
 	model, start_epoch, start_iter = bulid_new_model(args)
 	### 這邊chatgpt說 整個丟入 GPU 在 多 worker的情況下可能會出事, 所以我改成下面 item = Variable(item).to(args.device) 這邊 放GPU這樣子
 	model = torch.nn.DataParallel(model)
-	logging.info('===> Initialize optimizer')
+	print('===> Initialize optimizer')
 	optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr)
 
 	### 自己加入的 可以reload上次的結果繼續訓練

@@ -16,7 +16,6 @@ from tqdm import tqdm
 from PIL import Image
 import cv2
 from skimage.transform import resize
-import logging
 from config import *
 from util import *
 from evaluate import *
@@ -489,11 +488,6 @@ def load_model_and_deploy(args):
 	if args.dataset_choice=='SAMPLES':
 		test_samples(args,model)
 	elif args.dataset_choice=='AM_2K':
-		logging_filename = TEST_LOGS_FOLDER+args.logname+'.log'
-		if os.path.exists(logging_filename):
-			os.remove(logging_filename)
-		logging.basicConfig(filename=logging_filename, level=logging.INFO)
-		args.logging = logging
 		test_am2k(args, model)
 
 
