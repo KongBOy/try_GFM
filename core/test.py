@@ -125,7 +125,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_CenterCropNotMuch"
 		self.epoch 			    = 5000
-		self.test_result_dir    = f"{model_name}_x5.0"
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
 		# self.cuda        	    = True
@@ -143,7 +143,7 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
 		self.epoch 			    = 5000
-		self.test_result_dir    = f"{model_name}_x5.0"
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
 
 		# self.cuda        	    = True
