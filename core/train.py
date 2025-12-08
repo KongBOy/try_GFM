@@ -230,6 +230,33 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+### 2025/12/08/星期一 JoeRoom
+class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
+	def __init__(self):
+		model_name 	         = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
+		self.gpuNums         = 1
+		self.nEpochs         = 5000
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.logname         = "train_log"
+
+
+		self.dataset_using   = "Rebar"
+		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 480]
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 ### 2025/12/04/星期四 JoeRoom
 class Doc3D_args_ksize5_fixSize():
 	def __init__(self):
@@ -421,7 +448,8 @@ def main():
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
-	args = Doc3D_args_ksize5_fixSize()
+	args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
+	# args = Doc3D_args_ksize5_fixSize()
 	
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
