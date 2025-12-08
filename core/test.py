@@ -41,6 +41,8 @@ class Rebar_args():
 		self.backbone           = "r34"
 		self.rosta              = "TT"
 		self.model_path         = "models/trained/kong_trainckpt_epoch4000.pth"
+		self.db_name            = "Rebar"
+		self.test_img_dir       = "Rebar/samples/original/"
 		self.pred_choice        = 3
 		self.dataset_choice     = "SAMPLES"
 		self.test_choice        = "HYBRID"
@@ -53,9 +55,11 @@ class Rebar_args_ksize5():
 		self.cuda        	    = False
 		# self.cuda        	    = True
 		model_name 	            = "ksize5_CropOrd_LeftTop"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 15000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/original/"
 
 		self.backbone           = "r34"
 		self.rosta              = "TT"
@@ -70,9 +74,11 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 		# self.cuda        	    = False
 		self.cuda        	    = True
 		model_name 	            = "ksize5_fixSize_LeftTop"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 4000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/oribinal/"
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -88,9 +94,11 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		# self.cuda        	    = False
 		self.cuda        	    = True
 		model_name 	            = "ksize5_fixSize_CenterCrop"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/oribinal/"
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -106,9 +114,11 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		# self.cuda        	    = False
 		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_CenterCrop"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 20000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/oribinal/"
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -124,9 +134,11 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		# self.cuda        	    = False
 		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_CenterCropNotMuch"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/oribinal/"
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -142,9 +154,52 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		# self.cuda        	    = False
 		self.cuda        	    = True
 		model_name 	            = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
+		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
 		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
 		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Rebar/samples/oribinal/"
+
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/08/星期一 JoeRoom
+class Doc3D_args_ksize5_HaveSmallSize():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	            = "Doc3D_ksize5_fixSize"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		# self.cuda        	    = True
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+
+### 2025/12/08/星期一 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	            = "Doc3D_ksize25_fixSize"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -358,20 +413,20 @@ def test_am2k(args, model):
 
 
 def test_samples(args, model):
-	result_mask_dir = f"{REPOSITORY_ROOT_PATH}result/{args.test_result_dir}/mask"
-	result_img_dir  = f"{REPOSITORY_ROOT_PATH}result/{args.test_result_dir}/img"
+	result_mask_dir = f"{args.db_name}/result/{args.test_result_dir}/mask"
+	result_img_dir  = f"{args.db_name}/result/{args.test_result_dir}/img"
 
 	print(f'=====> Test on samples and save alpha, color results')
 	model.eval()
 	pred_choice = args.pred_choice
 
-	img_list = listdir_nohidden(SAMPLES_ORIGINAL_PATH)
+	img_list = listdir_nohidden(args.test_img_dir)
 	refresh_folder(result_mask_dir)
 	if pred_choice==3:
 		refresh_folder(result_img_dir)
 
 	for img_name in tqdm(img_list):
-		img_path = SAMPLES_ORIGINAL_PATH+img_name
+		img_path = args.test_img_dir+img_name
 		try:
 			img = np.array(Image.open(img_path))[:,:,:3]
 		except Exception as e:
@@ -416,6 +471,7 @@ def load_model_and_deploy(args):
 	print(f'Saving to the folder: {args.test_result_dir}')
 
 	model = GFM(args)
+	model = torch.nn.DataParallel(model)
 
 	if torch.cuda.device_count()==0:
 		print(f'Running on CPU...')
@@ -426,6 +482,7 @@ def load_model_and_deploy(args):
 		ckpt = torch.load(args.model_path)
 
 	model.load_state_dict(ckpt['model_state_dict'], strict=True)
+	
 	if args.cuda:
 		model = model.cuda()
 
@@ -448,7 +505,9 @@ if __name__ == '__main__':
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
-	args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
+	# args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
+	# args = Doc3D_args_ksize5_HaveSmallSize()
+	args = Doc3D_args_ksize25_HaveSmallSize()
 	load_model_and_deploy(args)
 
 
