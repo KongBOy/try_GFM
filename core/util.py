@@ -126,7 +126,12 @@ def generate_paths_for_dataset(args):
 	FG_GENERATE = args.fg_generate
 	RSSN_DENOISE = args.rssn_denoise
 
-	if(args.dataset_using == "Rebar"):
+	if(args.dataset_using == "Doc3D"):
+		ORI_PATH = DATASET_PATHS_DICT['Doc3D']['TRAIN']['ORIGINAL_PATH']
+		MASK_PATH = DATASET_PATHS_DICT['Doc3D']['TRAIN']['MASK_PATH']
+		SAMPLE_BAGS = 1 if BG_CHOICE=='original' else DATASET_PATHS_DICT['Rebar']['TRAIN']['SAMPLE_BAGS']
+		FG_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['FG_PATH'] if FG_GENERATE=='closed_form' else None 
+	elif(args.dataset_using == "Rebar"):
 		ORI_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['ORIGINAL_PATH']
 		MASK_PATH = DATASET_PATHS_DICT['Rebar']['TRAIN']['MASK_PATH']
 		SAMPLE_BAGS = 1 if BG_CHOICE=='original' else DATASET_PATHS_DICT['Rebar']['TRAIN']['SAMPLE_BAGS']
@@ -163,7 +168,7 @@ def generate_paths_for_dataset(args):
 		fg_path = FG_PATH+mask_name if FG_GENERATE=='closed_form' else None
 		path_list.append(fg_path)
 		if BG_CHOICE!='original':
-			bg_path = BG_PATH+bg_list[mask_list.index(mask_name)]
+			bg_path = BG_PATH+bg_list[mask_list.index(mask_name) % len(bg_list)]
 		elif FG_GENERATE=='closed_form':
 			bg_path = BG_PATH+extract_pure_name(mask_name)+'.jpg'
 		else:

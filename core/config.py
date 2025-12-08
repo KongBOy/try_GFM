@@ -11,6 +11,7 @@ Paper link (Arxiv): https://arxiv.org/abs/2010.16188
 
 ########## Root Paths and logging files paths
 REPOSITORY_ROOT_PATH = 'Rebar/'
+Doc3D_DATASET_ROOT_PATH = '../Doc3D/'
 REBAR_DATASET_ROOT_PATH = '../Rebar/'
 AM2K_DATASET_ROOT_PATH  = '../AM-2k/'
 BG20K_DATASET_ROOT_PATH = '../BG-20k/'
@@ -21,6 +22,26 @@ TEST_LOGS_FOLDER = REPOSITORY_ROOT_PATH+'logs/test_logs/'
 
 # ######### Paths of datasets
 DATASET_PATHS_DICT={
+'Doc3D':{
+	'TRAIN':{
+		'ROOT_PATH'       :Doc3D_DATASET_ROOT_PATH+'train/',
+		'ORIGINAL_PATH'   :Doc3D_DATASET_ROOT_PATH+'train/0_dis_img_jpg/',
+		'MASK_PATH'       :Doc3D_DATASET_ROOT_PATH+'train/2_mask/',
+		'FG_PATH'         :None,
+		'BG_PATH'	      :None,
+		'FG_DENOISE_PATH' :None,
+		'SAMPLE_NUMBER'   :3,
+		'SAMPLE_BAGS'     :3
+		},
+	'VALIDATION':{
+		'ROOT_PATH'     :Doc3D_DATASET_ROOT_PATH+'validation/',
+		'ORIGINAL_PATH' :Doc3D_DATASET_ROOT_PATH+'validation/0_dis_img/',
+		'MASK_PATH'		:Doc3D_DATASET_ROOT_PATH+'validation/2_mask/',
+		'TRIMAP_PATH'	:None,
+		'SAMPLE_NUMBER' :3,
+		'SAMPLE_BAGS'   :1
+		}
+	},
 'Rebar':{
 	'TRAIN':{
 		'ROOT_PATH'       :REBAR_DATASET_ROOT_PATH+'train/',
