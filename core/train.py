@@ -267,7 +267,7 @@ class Doc3D_args_ksize5_fixSize():
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
-		self.batchSize       = 8    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
@@ -293,7 +293,7 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.threads         = 0  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
-		self.batchSize       = 8    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
@@ -305,8 +305,34 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
 
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch1.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+### 2025/12/08/星期一 HP820G1
+class Doc3D_args_ksize25_HaveSmallSize():
+	def __init__(self):
+		model_name 	         = "Doc3D_ksize25_fixSize"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 0  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "ord_LeftTop"
+
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch1.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
@@ -343,7 +369,7 @@ def load_dataset(args):
 	train_loader = DataLoader(dataset=train_set, num_workers=args.threads, batch_size=args.batchSize, shuffle=True)
 	return train_loader
 
-def load_model(args):
+def bulid_new_model(args):
 	print("\t--Model backbone: {}".format(args.backbone))
 	print("\t--Model rosta: {}".format(args.rosta))
 	print("\t--BG choice: {}".format(args.bg_choice))
@@ -351,7 +377,8 @@ def load_model(args):
 	print("\t--Denoise choice: {}".format(args.rssn_denoise))
 	model = GFM(args).to(args.device)
 	start_epoch = 1
-	return model, start_epoch
+	start_iter  = 1
+	return model, start_epoch, start_iter
 
 def format_second(secs):
 	h = int(secs / 3600)
@@ -360,16 +387,13 @@ def format_second(secs):
 	ss = "Exa(h:m:s):{:0>2}:{:0>2}:{:0>2}".format(h,m,s)
 	return ss    
 
-def train(args, model, optimizer, train_loader, epoch):
-	### 這邊chatgpt說 整個丟入 GPU 在 多 worker的情況下可能會出事, 所以我改成下面 item = Variable(item).to(args.device) 這邊 放GPU這樣子
-	# model = torch.nn.DataParallel(model).to(args.device)
-	model = torch.nn.DataParallel(model)
+def train(args, model, optimizer, train_loader, epoch, iter_start=1):
 	model.train()
 	t0 = time.time()
 
 	loss_each_epoch=[]
 	# print("===============================")
-	for iteration, batch in enumerate(train_loader, 1):
+	for iteration, batch in enumerate(train_loader, iter_start):
 		torch.cuda.empty_cache()
 		batch_new = []
 		for item in batch:
@@ -453,14 +477,22 @@ def train(args, model, optimizer, train_loader, epoch):
 			else:
 				print("GFM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Global:{:.5f} Local:{:.5f} Fusion-alpha:{:.5f} Fusion-comp:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_global.item(), loss_local.item(), loss_fusion_alpha.item(), loss_fusion_comp.item(),speed, exp_time))
 			
-def save_last_checkpoint(args, model, optimizer, epoch):
+			if(args.dataset_using == "Doc3D"):
+				### Doc3D 有點大, 跑1000個iter就存一次吧
+				if(iteration % 1000 == 0):
+					### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
+					save_last_checkpoint(args, model, optimizer, epoch, iteration)
+
+			
+def save_last_checkpoint(args, model, optimizer, epoch, iteration=1):
 	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
-	print('=====> Saving best model',str(args.epoch))
+	print('=====> Saving best model',str(epoch))
 	create_folder_if_not_exists(args.model_save_dir)
-	model_out_path = "{}ckpt_epoch{}.pth".format(args.model_save_dir, args.epoch)
+	model_out_path = "{}ckpt_epoch{}.pth".format(args.model_save_dir, epoch)
 	torch.save({'model_state_dict'    : model.state_dict(),
 				'optimizer_state_dict': optimizer.state_dict(),
-				'epoch'				  : epoch} , model_out_path)
+				'epoch'				  : epoch,
+				'iteration'			  : iteration} , model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
 def main():
@@ -476,7 +508,8 @@ def main():
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
 	# args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
 	# args = Doc3D_args_ksize5_fixSize()
-	args = Doc3D_args_ksize5_HaveSmallSize()
+	# args = Doc3D_args_ksize5_HaveSmallSize()
+	args = Doc3D_args_ksize25_HaveSmallSize()
 	
 	now = datetime.datetime.now()
 	logging_filename = 'logs/train_logs/'+args.logname+'_'+now.strftime("%Y-%m-%d-%H:%M")+'.log'
@@ -510,7 +543,9 @@ def main():
 	logging.info(f'Running with GPUs and the number of GPUs: {args.gpuNums}')
 	train_loader = load_dataset(args)
 	logging.info('===> Building the model')
-	model, start_epoch = load_model(args)
+	model, start_epoch, start_iter = bulid_new_model(args)
+	### 這邊chatgpt說 整個丟入 GPU 在 多 worker的情況下可能會出事, 所以我改成下面 item = Variable(item).to(args.device) 這邊 放GPU這樣子
+	model = torch.nn.DataParallel(model)
 	logging.info('===> Initialize optimizer')
 	optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr)
 
@@ -520,14 +555,20 @@ def main():
 		model    .load_state_dict(checkpoint['model_state_dict'])
 		optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 		start_epoch = checkpoint['epoch'] + 1
+
+		### Doc3D 才加入iteration的, Rebar沒有存iteration讀不到會當掉喔
+		if(args.dataset_using == "Doc3D"):
+			start_epoch -= 1
+			start_iter   = checkpoint['iteration'] + 1
+			print(f"Resuming start_iter {start_iter}, ", end = "")
+
 		print(f"Resuming from epoch {start_epoch}")
 
 	now = datetime.datetime.now()
 	# training
 	for epoch in range(start_epoch, args.nEpochs + 1):
 		# print(f'Train on Epoch: {epoch}')
-		train(args, model, optimizer, train_loader, epoch)
-		args.epoch = epoch
+		train(args, model, optimizer, train_loader, epoch, start_iter)
 	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 	save_last_checkpoint(args, model, optimizer, epoch)
 
