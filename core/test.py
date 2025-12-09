@@ -480,6 +480,9 @@ def load_model_and_deploy(args):
 		print(f'Running on GPU with CUDA as {args.cuda}...')
 		ckpt = torch.load(args.model_path)
 
+	if("iteration" in ckpt.keys()):
+		args.test_result_dir += "_iter" + str(ckpt["iteration"])
+		
 	model.load_state_dict(ckpt['model_state_dict'], strict=True)
 	
 	if args.cuda:
