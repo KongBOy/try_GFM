@@ -30,7 +30,7 @@ class Kong_args():
 		self.gpuNums         = 1
 		self.nEpochs         = 100
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 16    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -50,7 +50,7 @@ class Rebar_args():
 		self.gpuNums         = 1
 		self.nEpochs         = 10000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -76,7 +76,7 @@ class Rebar_args_ksize5():
 		self.gpuNums         = 1
 		self.nEpochs         = 15000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -103,7 +103,7 @@ class Rebar_args_ksize5_r34_2b():
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34_2b"
 		self.rosta           = "TT"
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -130,7 +130,7 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 		self.gpuNums         = 1
 		self.nEpochs         = 4000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -156,7 +156,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -183,7 +183,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.gpuNums         = 1
 		self.nEpochs         = 20000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -210,7 +210,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -237,7 +237,7 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 10    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -264,7 +264,7 @@ class Doc3D_args_ksize5_fixSize():
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -290,7 +290,7 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -316,7 +316,7 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
-		self.threads         = 0  ### 8
+		self.threads         = 2  ### 8
 		self.backbone        = "r34"
 		self.rosta           = "TT"
 		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
@@ -331,7 +331,7 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
 
-		self.load_pretrained_model = False
+		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch1.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
