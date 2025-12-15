@@ -208,8 +208,107 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.test_choice        = "HYBRID"
 		self.logname            = "test_log"
 
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch16():
+	def __init__(self):
+
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	            = "Doc3D_ksize25_fixSize_batch16"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b():
+	def __init__(self):
+		
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	         	= "Doc3D_ksize25_fixSize_batch04_r34_2b"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		self.backbone           = "r34_2b"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	         	= "Doc3D_ksize25_fixSize_batch04_r34_2b_center"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		self.backbone           = "r34_2b"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/11/星期四 JoeRoom
+class Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	         	= "Doc3D_ksize25_fixSize240_batch04_r34_2b_center"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		self.backbone           = "r34_2b"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		model_name 	         	= "Doc3D_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 3
+		self.iter 			    = -1
+		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		if(self.iter != -1):
+			self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}_iter{self.iter}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+
+		self.backbone           = "r34_2b"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
+
 def get_args():
-	
 	parser = argparse.ArgumentParser(description='Arguments for the testing purpose.')	
 	# backbone: the backbone of GFM, we provide four backbones - r34, r34_2b, d121 and r101.
 	# rosta (Representations of Semantic and Transition areas): we provide three types - TT, FT, and BT. 
@@ -497,14 +596,19 @@ def load_model_and_deploy(args):
 if __name__ == '__main__':
 	# args = get_args()
 	# args = Rebar_args()
-	args = Rebar_args_ksize5()
+	# args = Rebar_args_ksize5()
 	# args = Rebar_args_ksize5_fixSize_LeftTop()
 	# args = Rebar_args_ksize5_fixSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCrop()
 	# args = Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch()
 	# args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
 	# args = Doc3D_args_ksize5_HaveSmallSize()
-	args = Doc3D_args_ksize25_HaveSmallSize()
+	# args = Doc3D_args_ksize25_HaveSmallSize()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch16()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center()
+	# args = Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center()
+	args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop()
 	load_model_and_deploy(args)
 
 
