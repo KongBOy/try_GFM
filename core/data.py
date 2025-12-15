@@ -32,6 +32,8 @@ class MattingTransform(object):
 	def __init__(self, args):
 		super(MattingTransform, self).__init__()
 		self.args = args
+		''' 目前有三種: ord_LeftTop, center, mix '''
+		self.crop_method = "ord_LeftTop"
 
 	def __call__(self, *argv):
 		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
@@ -49,6 +51,11 @@ class MattingTransform(object):
 		ori = argv[0]
 		h, w, c = ori.shape
 
+		''' 抓出 args 裡面的 crop_method, 預設是 ord_LeftTop, mix的話就 50% ord_LeftTop, 50% center '''
+		if  (self.args.crop_method == "center"): self.crop_method = "center"
+		elif(self.args.crop_method == "mix"   ): self.crop_method = "center" if random.random() < 0.5 else "ord_LeftTop"
+
+		########################################################################################################################################################################
 		''' 在 trimap == 128 的地方 隨機 crop 影像出來訓練, 原始code 隨機點挑出來後當左上角往右下角crop, 我是覺得 隨機點挑出來當中心點往左右上下crop會更好 '''
 		### CROP_SIZE 是一個 [], 比如 [640, 960, 1280], 這邊試想隨機從裡面挑一個 size出來
 		rand_ind = random.randint(0, len(self.args.kong_CROP_SIZE) - 1)
@@ -58,8 +65,8 @@ class MattingTransform(object):
 		resize_size = RESIZE_SIZE
 		### 可以crop的範圍圈出來
 		trimap = argv[4]
-		if  (self.args.crop_method == "ord_LeftTop"): trimap_crop = trimap[ 			     : h - crop_size      ,     	        : w - crop_size      ]
-		elif(self.args.crop_method == "center"     ): trimap_crop = trimap[ crop_size // 2  : h - crop_size // 2 , crop_size // 2  : w - crop_size // 2 ]
+		if  (self.crop_method == "ord_LeftTop"): trimap_crop = trimap[ 			       : h - crop_size      ,     	          : w - crop_size      ]
+		elif(self.crop_method == "center"     ): trimap_crop = trimap[ crop_size // 2  : h - crop_size // 2 , crop_size // 2  : w - crop_size // 2 ]
 
 		### 找 trimap == 128 的地方 的座標點, random 的從裡面選一個點 來 crop影像
 		target = np.where(trimap_crop == 128) # if random.random() < 1.0 else np.where(trimap_crop > -100)
@@ -69,8 +76,8 @@ class MattingTransform(object):
 		rand_ind = np.random.randint(len(target[0]), size = 1)[0]
 
 		### 隨機選的這一點 設定為左上角 或者為 中心點 為起點,  可以用原版的 左上角當起點往右下角drop, 或者我覺得比較合理的 中心點為起點往上下左右crop
-		if  (self.args.crop_method == "ord_LeftTop"): cropx, cropy = target[1][rand_ind] 				   , target[0][rand_ind] 
-		elif(self.args.crop_method == "center"     ): cropx, cropy = target[1][rand_ind] + crop_size // 2 , target[0][rand_ind] + crop_size // 2 
+		if  (self.crop_method == "ord_LeftTop"): cropx, cropy = target[1][rand_ind] 	   		     , target[0][rand_ind] 
+		elif(self.crop_method == "center"     ): cropx, cropy = target[1][rand_ind] + crop_size // 2 , target[0][rand_ind] + crop_size // 2 
 
 		### 0.5的機率左右翻轉
 		flip_flag=True if random.random()<0.5 else False
@@ -78,13 +85,15 @@ class MattingTransform(object):
 		### 實際去 crop影像 和 翻轉, 最後 resize 成 320
 		argv_transform = []
 		for item in argv:
-			if  (self.args.crop_method == "ord_LeftTop"): item = item[cropy 				   : cropy + crop_size      , cropx 				  : cropx + crop_size	   ]
-			elif(self.args.crop_method == "center"     ): item = item[cropy - crop_size // 2  : cropy + crop_size // 2 , cropx - crop_size // 2  : cropx + crop_size // 2 ]
-			if flip_flag:
-				item = cv2.flip(item, 1)
-			item = cv2.resize(item, (resize_size, resize_size), interpolation=cv2.INTER_LINEAR)
+			''' dilation / erosion 改成有用到的話再去生成, 沒用到的話就用 0 表示, 所以如果遇到 int 就 pass, 非 int 才crop '''
+			if(isinstance(item, int) == False):
+				if  (self.crop_method == "ord_LeftTop"): item = item[cropy 				     : cropy + crop_size      , cropx 				  : cropx + crop_size	   ]
+				elif(self.crop_method == "center"     ): item = item[cropy - crop_size // 2  : cropy + crop_size // 2 , cropx - crop_size // 2  : cropx + crop_size // 2 ]
+				if flip_flag:
+					item = cv2.flip(item, 1)
+				item = cv2.resize(item, (resize_size, resize_size), interpolation=cv2.INTER_LINEAR)
 			argv_transform.append(item)
-		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
+		# fig, ax = plt.subplots(ncols=5, nrows=1, figsize=(18, 4))
 		# ax[0].imshow(argv_transform[0].astype(np.uint8))  ### ori
 		# ax[1].imshow(argv_transform[1].astype(np.uint8))  ### mask
 		# ax[2].imshow(argv_transform[2].astype(np.uint8))  ### fg, 
@@ -146,10 +155,18 @@ class MattingDataset(torch.utils.data.Dataset):
 		kernel_size_tt = self.args.ksize
 		kernel_size_ftbt = self.args.ksize * 2
 		trimap = gen_trimap_with_dilate(mask, kernel_size_tt)
-		dilation = gen_dilate(mask, kernel_size_ftbt)
-		erosion = gen_erosion(mask, kernel_size_ftbt)
-		dilation_subtraction = dilation-mask
-		erosion_subtraction = mask-erosion
+
+		''' dilation / erosion 改成有用到的話再去生成, 沒用到的話就用 0 表示, 才不會cpu loading 太重 '''
+		dilation = 0
+		dilation_subtraction = 0
+		if(self.args.rosta in  ["FT", "RIM"]):
+			dilation = gen_dilate(mask, kernel_size_ftbt)
+			dilation_subtraction = dilation-mask
+		erosion = 0
+		erosion_subtraction  = 0
+		if(self.args.rosta in  ["BT", "RIM"]):
+			erosion = gen_erosion(mask, kernel_size_ftbt)
+			erosion_subtraction = mask-erosion
 		# Data transformation to generate samples
 		# crop/flip/resize
 		# fig, ax = plt.subplots(ncols=9, nrows=1, figsize=(18, 4))
@@ -167,10 +184,12 @@ class MattingDataset(torch.utils.data.Dataset):
 		argv = self.transform(ori, mask, fg, bg, trimap, dilation, erosion, dilation_subtraction, erosion_subtraction)
 		argv_transform = []
 		for item in argv:
-			if item.ndim<3:
-				item = torch.from_numpy(item.astype(np.float32)[np.newaxis, :, :])
-			else:
-				item = torch.from_numpy(item.astype(np.float32)).permute(2, 0, 1)
+			''' dilation / erosion 改成有用到才生成, 沒用到的話就用 0 表示, 所以如果遇到 int 就 pass, 非 int 才轉成 tensor '''
+			if(isinstance(item, int) == False):
+				if item.ndim<3:
+					item = torch.from_numpy(item.astype(np.float32)[np.newaxis, :, :])
+				else:
+					item = torch.from_numpy(item.astype(np.float32)).permute(2, 0, 1)
 			argv_transform.append(item)
 
 		[ori, mask, fg, bg, trimap, dilation, erosion, dilation_subtraction, erosion_subtraction] = argv_transform
