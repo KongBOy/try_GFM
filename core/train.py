@@ -492,11 +492,12 @@ def train(args, model, optimizer, train_loader, epoch, iter_start=1, writer=None
 			
 			if(args.dataset_using == "Doc3D"):
 				### Doc3D 有點大, 跑1000個iter就存一次吧
-				if(iteration % 1000 == 0):
+				if(iteration % 500 == 0):
 					### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 					save_last_checkpoint(args, model, optimizer, epoch, iteration)
 			t0 = t1
 
+		if(iteration >= num_iter): break
 			
 def save_last_checkpoint(args, model, optimizer, epoch, iteration=1):
 	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
@@ -572,7 +573,11 @@ def main():
 		### Doc3D 才加入iteration的, Rebar沒有存iteration讀不到會當掉喔
 		if(args.dataset_using == "Doc3D"):
 			start_epoch -= 1
-			start_iter   = checkpoint['iteration'] + 1
+			''' 自己加的 start_iter 核心 '''
+			start_iter   = (checkpoint['iteration'] + 1)
+			if(start_iter >= 25516):
+				start_epoch += 1
+				start_iter   = start_iter % 25516
 			print(f"Resuming start_iter {start_iter}, ", end = "")
 
 		print(f"Resuming from epoch {start_epoch}")
@@ -582,6 +587,8 @@ def main():
 	for epoch in range(start_epoch, args.nEpochs + 1):
 		# print(f'Train on Epoch: {epoch}')
 		train(args, model, optimizer, train_loader, epoch, start_iter, writer)
+		''' 自己加的 start_iter 核心 '''
+		start_iter = 1
 	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 	save_last_checkpoint(args, model, optimizer, epoch)
 
