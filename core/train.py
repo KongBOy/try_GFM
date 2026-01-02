@@ -336,6 +336,167 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch16():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSize_batch16"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 6  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 16    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSzie_batch04_r34_2b"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 6  ### 8
+		self.backbone        = "r34_2b"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "ord_LeftTop"
+
+		self.load_pretrained_model = False
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSize_batch04_r34_2b_center"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 6  ### 8
+		self.backbone        = "r34_2b"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "center"
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		self.t0 = 0
+
+### 2025/12/11/星期四 JoeRoom
+class Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_fixSize240_batch04_r34_2b_center"
+		self.gpuNums         = 1
+		self.nEpochs         = 1
+		self.lr              = 0.00001
+		self.threads         = 6  ### 8
+		self.backbone        = "r34_2b"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [240]
+		self.crop_method     = "center"
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		self.t0 = 0
+
+### 2025/12/10/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop"
+		self.gpuNums         = 1
+		self.nEpochs         = 8
+		self.lr              = 0.00001
+		self.threads         = 4  ### 8
+		self.backbone        = "r34_2b"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "mix"
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch6.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		self.t0 = 0
+
+### 2025/12/17/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSize_batch04_r34_MixCrop"
+		self.gpuNums         = 1
+		self.nEpochs         = 10
+		self.lr              = 0.00001
+		self.threads         = 5  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "mix"
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch8.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		self.t0 = 0
+
 ######### Parsing arguments ######### 
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments for the training purpose.')
@@ -524,7 +685,13 @@ def main():
 	# args = Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch()
 	# args = Doc3D_args_ksize5_fixSize()
 	# args = Doc3D_args_ksize5_HaveSmallSize()
-	args = Doc3D_args_ksize25_HaveSmallSize()
+	# args = Doc3D_args_ksize25_HaveSmallSize()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch16()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center()
+	# args = Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop()
+	args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop()
 	
 	now = datetime.datetime.now()
 	print("===============================")
