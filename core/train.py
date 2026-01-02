@@ -24,6 +24,7 @@ from util import *
 from evaluate import *
 from gfm import GFM
 from data import MattingDataset, MattingTransform
+from torch.utils.tensorboard import SummaryWriter
 
 class Kong_args():
 	def __init__(self):
