@@ -161,7 +161,7 @@ class GFM(nn.Module):
                 BasicBlock(512,512),
                 BasicBlock(512,512))
 
-            self.psp_module = PSPModule(512, 512, (1, 3, 5))
+            self.psp_module = PSPModule(512, 512, self.psp_module_sizes)
             self.psp6 = conv_up_psp(512, 512, 2)
             self.psp5 = conv_up_psp(512, 512, 4)
             self.psp4 = conv_up_psp(512, 256, 8)
