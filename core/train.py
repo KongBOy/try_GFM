@@ -72,7 +72,7 @@ class Rebar_args():
 ### 2025/12/03/星期三
 class Rebar_args_ksize5():
 	def __init__(self):
-		model_name 	         = "ksize5_CropOrd_LeftTop"
+		self.model_name 	 = "ksize5_CropOrd_LeftTop"
 		self.gpuNums         = 1
 		self.nEpochs         = 15000
 		self.lr              = 0.00001
@@ -82,7 +82,7 @@ class Rebar_args_ksize5():
 		self.batchSize       = 3    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 
@@ -99,7 +99,7 @@ class Rebar_args_ksize5():
 ### 2025/12/03/星期三 HP820G1
 class Rebar_args_ksize5_r34_2b():
 	def __init__(self):
-		model_name 	         = "ksize5_CropOrd_LeftTop_r34_2b"
+		self.model_name 	 = "ksize5_CropOrd_LeftTop_r34_2b"
 		self.gpuNums         = 1
 		self.nEpochs         = 500
 		self.lr              = 0.00001
@@ -110,7 +110,7 @@ class Rebar_args_ksize5_r34_2b():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 		
 		self.dataset_using   = "Rebar"
@@ -126,7 +126,7 @@ class Rebar_args_ksize5_r34_2b():
 ### 2025/12/04/星期四 JoeRoom
 class Rebar_args_ksize5_fixSize_LeftTop():
 	def __init__(self):
-		model_name 	         = "ksize5_fixSize_LeftTop"
+		self.model_name 	 = "ksize5_fixSize_LeftTop"
 		self.gpuNums         = 1
 		self.nEpochs         = 4000
 		self.lr              = 0.00001
@@ -137,7 +137,7 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Rebar"
@@ -146,13 +146,13 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/04/星期四 JoeRoom
 class Rebar_args_ksize5_fixSize_CenterCrop():
 	def __init__(self):
-		model_name 	         = "ksize5_fixSize_CenterCrop"
+		self.model_name 	 = "ksize5_fixSize_CenterCrop"
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
@@ -163,7 +163,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Rebar"
@@ -172,14 +172,14 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.crop_method     = "center"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 ### 2025/12/04/星期四 HP820G1/JoeRoom
 class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
-		model_name 	         = "ksize5_HaveSmallSize_CenterCrop"
+		self.model_name 	 = "ksize5_HaveSmallSize_CenterCrop"
 		self.gpuNums         = 1
 		self.nEpochs         = 20000
 		self.lr              = 0.00001
@@ -190,7 +190,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 
@@ -200,13 +200,13 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.crop_method     = "center"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch10500.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch10500.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	
 ### 2025/12/04/星期五 JoeRoom
 class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 	def __init__(self):
-		model_name 	         = "ksize5_HaveSmallSize_CenterCropNotMuch"
+		self.model_name 	 = "ksize5_HaveSmallSize_CenterCropNotMuch"
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
@@ -217,7 +217,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 
@@ -227,13 +227,13 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.crop_method     = "center"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/08/星期一 JoeRoom
 class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 	def __init__(self):
-		model_name 	         = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
+		self.model_name 	 = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
 		self.gpuNums         = 1
 		self.nEpochs         = 5000
 		self.lr              = 0.00001
@@ -244,7 +244,7 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 
@@ -254,13 +254,13 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/08/星期一 HP820G1
 class Doc3D_args_ksize5_fixSize():
 	def __init__(self):
-		model_name 	         = "Doc3D_ksize5_fixSize"
+		self.model_name 	 = "Doc3D_ksize5_fixSize"
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
@@ -271,7 +271,7 @@ class Doc3D_args_ksize5_fixSize():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Doc3D"
@@ -280,13 +280,13 @@ class Doc3D_args_ksize5_fixSize():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = False
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch0.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/08/星期一 HP820G1
 class Doc3D_args_ksize5_HaveSmallSize():
 	def __init__(self):
-		model_name 	         = "Doc3D_ksize5_fixSize"
+		self.model_name 	 = "Doc3D_ksize5_fixSize"
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
@@ -297,7 +297,7 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Doc3D"
@@ -306,13 +306,13 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch1.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ### 2025/12/08/星期一 HP820G1
 class Doc3D_args_ksize25_HaveSmallSize():
 	def __init__(self):
-		model_name 	         = "Doc3D_ksize25_fixSize"
+		self.model_name 	 = "Doc3D_ksize25_fixSize"
 		self.gpuNums         = 1
 		self.nEpochs         = 1
 		self.lr              = 0.00001
@@ -323,7 +323,7 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.bg_choice       = "hd"  ### "coco"
 		self.fg_generate     = "alpha_blending"
 		self.rssn_denoise    = False
-		self.model_save_dir  = f"models/trained/{model_name}/"
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
 		self.logname         = "train_log"
 
 		self.dataset_using   = "Doc3D"
@@ -332,7 +332,7 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.crop_method     = "ord_LeftTop"
 
 		self.load_pretrained_model = True
-		self.checkpoint_path = f"models/trained/{model_name}/ckpt_epoch1.pth"
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ######### Parsing arguments ######### 
@@ -476,6 +476,18 @@ def train(args, model, optimizer, train_loader, epoch, iter_start=1):
 				print("GFM-RIM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Loss-TT:{:.5f} Loss-FT:{:.5f} Loss-BT:{:.5f} Loss-final:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_tt.item(), loss_ft.item(), loss_bt.item(), loss_final.item(),speed, exp_time))
 			else:
 				print("GFM-Epoch[{}/{}]({}/{}) Lr:{:.8f} Loss:{:.5f} Global:{:.5f} Local:{:.5f} Fusion-alpha:{:.5f} Fusion-comp:{:.5f} Speed:{:.5f}s/iter {}".format(epoch, args.nEpochs, iteration, num_iter, optimizer.param_groups[0]['lr'], loss.item(), loss_global.item(), loss_local.item(), loss_fusion_alpha.item(), loss_fusion_comp.item(),speed, exp_time))
+				if(writer):
+					global_step = (epoch - 1) * num_iter + iteration
+					writer.add_scalar("loss_total" 		  , loss	   	     .item(), global_step )
+					writer.add_scalar("loss_global"       , loss_global	     .item(), global_step )
+					writer.add_scalar("loss_local"        , loss_local 	     .item(), global_step )
+					writer.add_scalar("loss_fusion_alpha" , loss_fusion_alpha.item(), global_step )
+					writer.add_scalar("loss_fusion_comp"  , loss_fusion_comp .item(), global_step )
+					# writer.add_scalar("2 loss_total" 		  , loss	   	     .item(), global_step )
+					# writer.add_scalar("0 loss_global"       , loss_global	     .item(), global_step )
+					# writer.add_scalar("1 loss_local"        , loss_local 	     .item(), global_step )
+					# writer.add_scalar("3 loss_fusion_alpha" , loss_fusion_alpha.item(), global_step )
+					# writer.add_scalar("4 loss_fusion_comp"  , loss_fusion_comp .item(), global_step )
 			
 			if(args.dataset_using == "Doc3D"):
 				### Doc3D 有點大, 跑1000個iter就存一次吧
@@ -544,6 +556,9 @@ def main():
 	model = torch.nn.DataParallel(model)
 	print('===> Initialize optimizer')
 	optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr)
+
+	writer = SummaryWriter(f"logs/{args.model_name}")
+	# writer = None
 
 	### 自己加入的 可以reload上次的結果繼續訓練
 	if(args.load_pretrained_model):
