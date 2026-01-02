@@ -387,7 +387,7 @@ def format_second(secs):
 	ss = "Exa(h:m:s):{:0>2}:{:0>2}:{:0>2}".format(h,m,s)
 	return ss    
 
-def train(args, model, optimizer, train_loader, epoch, iter_start=1):
+def train(args, model, optimizer, train_loader, epoch, iter_start=1, writer=None):
 	model.train()
 	t0 = time.time()
 
@@ -579,7 +579,7 @@ def main():
 	# training
 	for epoch in range(start_epoch, args.nEpochs + 1):
 		# print(f'Train on Epoch: {epoch}')
-		train(args, model, optimizer, train_loader, epoch, start_iter)
+		train(args, model, optimizer, train_loader, epoch, start_iter, writer)
 	### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 	save_last_checkpoint(args, model, optimizer, epoch)
 
