@@ -389,11 +389,12 @@ def format_second(secs):
 
 def train(args, model, optimizer, train_loader, epoch, iter_start=1, writer=None):
 	model.train()
-	t0 = time.time()
+	num_iter = len(train_loader)
 
 	loss_each_epoch=[]
 	# print("===============================")
 	for iteration, batch in enumerate(train_loader, iter_start):
+		t0 = time.time()
 		torch.cuda.empty_cache()
 		batch_new = []
 		for item in batch:
@@ -468,8 +469,7 @@ def train(args, model, optimizer, train_loader, epoch, iter_start=1, writer=None
 
 		if iteration !=  0:
 			t1 = time.time()
-			num_iter = len(train_loader)
-			speed = (t1 - t0) / iteration
+			speed = (t1 - t0)
 			exp_time = format_second(speed * (num_iter * (args.nEpochs - epoch + 1) - iteration))          
 			loss_each_epoch.append(loss.item())
 			if args.rosta=='RIM':
@@ -494,6 +494,7 @@ def train(args, model, optimizer, train_loader, epoch, iter_start=1, writer=None
 				if(iteration % 1000 == 0):
 					### 多存 optimizer_state_dict 和 epoch 讓 model 可以 reload繼續訓練
 					save_last_checkpoint(args, model, optimizer, epoch, iteration)
+			t0 = t1
 
 			
 def save_last_checkpoint(args, model, optimizer, epoch, iteration=1):
