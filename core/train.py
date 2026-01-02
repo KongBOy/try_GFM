@@ -45,6 +45,7 @@ class Kong_args():
 		self.ksize			 = 25  ### 原始動物Dataset用25完全沒問題
 		self.kong_CROP_SIZE  = [640, 960, 1280]
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 class Rebar_args():
 	def __init__(self):
@@ -65,6 +66,7 @@ class Rebar_args():
 		self.ksize			 = 25  ### 發現 trimap 完全沒有 白色mask, 只剩 灰色不確定區域 和 黑色不是區域
 		self.kong_CROP_SIZE  = [640, 960, 1280]
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = "models/trained/kong_trainckpt_epoch4000.pth"
@@ -91,6 +93,7 @@ class Rebar_args_ksize5():
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [640, 960, 1280]
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
@@ -118,6 +121,7 @@ class Rebar_args_ksize5_r34_2b():
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [640, 960, 1280]
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = "models/trained/kong_train_ksize5/ckpt_epoch0.pth"
@@ -145,6 +149,7 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
@@ -171,6 +176,7 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
 		self.crop_method     = "center"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
@@ -199,6 +205,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [kong_size * 40 for kong_size in range(1, 20)]  ### [40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600, 640, 680, 720, 760]
 		self.crop_method     = "center"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch10500.pth"
@@ -226,6 +233,7 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 480]
 		self.crop_method     = "center"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
@@ -253,6 +261,7 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 		self.ksize 			 = 5  ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 480]
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
@@ -279,6 +288,7 @@ class Doc3D_args_ksize5_fixSize():
 		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [320]  ### fixSize就直接設 model 的 input大小好了
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch0.pth"
@@ -305,6 +315,7 @@ class Doc3D_args_ksize5_HaveSmallSize():
 		self.ksize 			 = 5      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -331,6 +342,7 @@ class Doc3D_args_ksize25_HaveSmallSize():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -357,6 +369,7 @@ class Doc3D_args_ksize25_HaveSmallSize_batch16():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -384,6 +397,7 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "ord_LeftTop"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = False
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -410,6 +424,7 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "center"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -437,6 +452,7 @@ class Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [240]
 		self.crop_method     = "center"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch1.pth"
@@ -464,6 +480,7 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "mix"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch6.pth"
@@ -491,6 +508,7 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop():
 		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
 		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
 		self.crop_method     = "mix"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.load_pretrained_model = True
 		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch8.pth"

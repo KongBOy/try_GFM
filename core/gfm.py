@@ -131,6 +131,7 @@ class GFM(nn.Module):
 
         self.backbone = args.backbone
         self.rosta = args.rosta
+        self.psp_module_sizes = args.psp_module_sizes
         if self.rosta=='TT':
             self.gd_channel = 3
         else:
