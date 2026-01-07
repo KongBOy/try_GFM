@@ -515,6 +515,36 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop():
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 		self.t0 = 0
 
+
+### 2026/01/02/星期五 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop_PSP136():
+	def __init__(self):
+		self.model_name 	 = "Doc3D_ksize25_HaveSmallSize_batch04_r34_MixCrop_PSP136"
+		self.gpuNums         = 1
+		self.nEpochs         = 10
+		self.lr              = 0.00001
+		self.threads         = 5  ### 8
+		self.backbone        = "r34"
+		self.rosta           = "TT"
+		self.batchSize       = 4    ###  batchsize=`expr $batchsizePerGPU \* $GPUNum`
+		self.bg_choice       = "hd"  ### "coco"
+		self.fg_generate     = "alpha_blending"
+		self.rssn_denoise    = False
+		self.model_save_dir  = f"models/trained/{self.model_name}/"
+		self.logname         = "train_log"
+
+		self.dataset_using   = "Doc3D"
+		self.ksize 			 = 25      ### 這樣子 trimap 才有 白色區域喔
+		self.kong_CROP_SIZE  = [160, 240, 320, 400, 448]  ### Doc3D最大448, 所以480就用448吧
+		self.crop_method     = "mix"
+		self.psp_module_sizes = (1, 3, 6)
+
+		self.load_pretrained_model = True
+		self.checkpoint_path = f"models/trained/{self.model_name}/ckpt_epoch5_iter9500.pth"
+		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		self.t0 = 0
+
+
 ######### Parsing arguments ######### 
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments for the training purpose.')
@@ -709,7 +739,8 @@ def main():
 	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center()
 	# args = Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center()
 	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop()
-	args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop()
+	args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop_PSP136()
 	
 	now = datetime.datetime.now()
 	print("===============================")
