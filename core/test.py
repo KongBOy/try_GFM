@@ -53,12 +53,13 @@ class Rebar_args_ksize5():
 		''' ord crop [640, 960, 1280], 超過用 320 '''
 		self.cuda        	    = False
 		# self.cuda        	    = True
-		model_name 	            = "ksize5_CropOrd_LeftTop"
+		self.model_name 	    = "ksize5_CropOrd_LeftTop"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 15000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/original/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34"
 		self.rosta              = "TT"
@@ -72,12 +73,13 @@ class Rebar_args_ksize5_fixSize_LeftTop():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "ksize5_fixSize_LeftTop"
+		self.model_name 	    = "ksize5_fixSize_LeftTop"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 4000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/oribinal/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -92,12 +94,13 @@ class Rebar_args_ksize5_fixSize_CenterCrop():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "ksize5_fixSize_CenterCrop"
+		self.model_name 	    = "ksize5_fixSize_CenterCrop"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/oribinal/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -112,12 +115,13 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCrop():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "ksize5_HaveSmallSize_CenterCrop"
+		self.model_name 	    = "ksize5_HaveSmallSize_CenterCrop"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 20000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/oribinal/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -132,12 +136,13 @@ class Rebar_args_ksize5_HaveSmallSize_CenterCropNotMuch():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "ksize5_HaveSmallSize_CenterCropNotMuch"
+		self.model_name 	    = "ksize5_HaveSmallSize_CenterCropNotMuch"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/oribinal/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -152,12 +157,13 @@ class Rebar_args_ksize5_HaveSmallSize_LeftTopCropNotMuch():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
+		self.model_name 	    = "ksize5_HaveSmallSize_LeftTopCropNotMuch"
 		self.db_name            = "Rebar"
 		self.epoch 			    = 5000
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Rebar/samples/oribinal/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -172,12 +178,13 @@ class Doc3D_args_ksize5_HaveSmallSize():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "Doc3D_ksize5_fixSize"
+		self.model_name 	    = "Doc3D_ksize5_fixSize"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -193,12 +200,13 @@ class Doc3D_args_ksize25_HaveSmallSize():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "Doc3D_ksize25_fixSize"
+		self.model_name 	    = "Doc3D_ksize25_fixSize"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		# self.cuda        	    = True
 		self.backbone           = "r34"
@@ -214,12 +222,13 @@ class Doc3D_args_ksize25_HaveSmallSize_batch16():
 
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	            = "Doc3D_ksize25_fixSize_batch16"
+		self.model_name 	    = "Doc3D_ksize25_fixSize_batch16"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34"
 		self.rosta              = "TT"
@@ -234,12 +243,13 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b():
 		
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	         	= "Doc3D_ksize25_fixSize_batch04_r34_2b"
+		self.model_name 	    = "Doc3D_ksize25_fixSize_batch04_r34_2b"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34_2b"
 		self.rosta              = "TT"
@@ -253,12 +263,13 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	         	= "Doc3D_ksize25_fixSize_batch04_r34_2b_center"
+		self.model_name 	    = "Doc3D_ksize25_fixSize_batch04_r34_2b_center"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34_2b"
 		self.rosta              = "TT"
@@ -272,12 +283,13 @@ class Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	         	= "Doc3D_ksize25_fixSize240_batch04_r34_2b_center"
+		self.model_name 	    = "Doc3D_ksize25_fixSize240_batch04_r34_2b_center"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34_2b"
 		self.rosta              = "TT"
@@ -291,15 +303,16 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop():
 	def __init__(self):
 		# self.cuda        	    = False
 		self.cuda        	    = True
-		model_name 	         	= "Doc3D_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop"
+		self.model_name 	    = "Doc3D_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop"
 		self.db_name            = "Doc3D"
 		self.epoch 			    = 3
 		self.iter 			    = -1
-		self.test_result_dir    = f"{model_name}_x5.0_ep{self.epoch}"
-		self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}.pth"
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
 		if(self.iter != -1):
-			self.model_path         = f"models/trained/{model_name}/ckpt_epoch{self.epoch}_iter{self.iter}.pth"
+			self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}_iter{self.iter}.pth"
 		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
 
 		self.backbone           = "r34_2b"
 		self.rosta              = "TT"
