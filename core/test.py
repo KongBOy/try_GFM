@@ -321,6 +321,28 @@ class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop():
 		self.test_choice        = "HYBRID"
 		self.logname            = "test_log"
 
+### 2025/12/17/星期三 JoeRoom
+class Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop():
+	def __init__(self):
+		# self.cuda        	    = False
+		self.cuda        	    = True
+		self.model_name 	    = "Doc3D_ksize25_HaveSmallSize_batch04_r34_MixCrop"
+		self.db_name            = "Doc3D"
+		self.epoch 			    = 8
+		self.iter 			    = -1
+		self.test_result_dir    = f"{self.model_name}_x5.0_ep{self.epoch}"
+		self.model_path         = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}.pth"
+		if(self.iter != -1):
+			self.model_path     = f"models/trained/{self.model_name}/ckpt_epoch{self.epoch}_iter{self.iter}.pth"
+		self.test_img_dir       = "Doc3D/samples/"
+		self.psp_module_sizes = (1, 3, 5)
+
+		self.backbone           = "r34"
+		self.rosta              = "TT"
+		self.pred_choice        = 3
+		self.dataset_choice     = "SAMPLES"
+		self.test_choice        = "HYBRID"
+		self.logname            = "test_log"
 def get_args():
 	parser = argparse.ArgumentParser(description='Arguments for the testing purpose.')	
 	# backbone: the backbone of GFM, we provide four backbones - r34, r34_2b, d121 and r101.
@@ -621,7 +643,8 @@ if __name__ == '__main__':
 	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b()
 	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_Center()
 	# args = Doc3D_args_ksize25_fixsize240_batch04_r34_2b_Center()
-	args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_2b_MixCrop()
+	# args = Doc3D_args_ksize25_HaveSmallSize_batch04_r34_MixCrop()
 	load_model_and_deploy(args)
 
 
