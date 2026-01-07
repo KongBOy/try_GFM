@@ -641,6 +641,9 @@ def load_model_and_deploy(args):
 
 	if("iteration" in ckpt.keys()):
 		args.test_result_dir += "_iter" + str(ckpt["iteration"])
+		load_ep   = ckpt["epoch"]
+		load_iter = ckpt["iteration"]
+		print(f"load_ep={load_ep}, load_iter={load_iter}")
 		
 	model.load_state_dict(ckpt['model_state_dict'], strict=True)
 	
