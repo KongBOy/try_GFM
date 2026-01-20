@@ -53,7 +53,20 @@ class MattingTransform(object):
 
 		''' 抓出 args 裡面的 crop_method, 預設是 ord_LeftTop, mix的話就 50% ord_LeftTop, 50% center '''
 		if  (self.args.crop_method == "center"): self.crop_method = "center"
-		elif(self.args.crop_method == "mix"   ): self.crop_method = "center" if random.random() < 0.5 else "ord_LeftTop"
+		elif(self.args.crop_method == "ord_LeftTop"): self.crop_method = "ord_LeftTop"
+		elif(self.args.crop_method == "RightTop"   ): self.crop_method = "RightTop"
+		elif(self.args.crop_method == "LeftDown"   ): self.crop_method = "LeftDown"
+		elif(self.args.crop_method == "RightDown"  ): self.crop_method = "RightDown"
+		### 上一版的只有 LeftTop / Center
+		elif(self.args.crop_method == "mix"        ):
+			self.crop_method = "center" if random.random() < 0.5 else "ord_LeftTop"
+		elif(self.args.crop_method == "NewMix"        ):
+			rand_num =  random.random()
+			if  (         rand_num < 0.20): self.crop_method = "center"
+			elif( 0.20 <= rand_num < 0.40): self.crop_method = "ord_LeftTop"
+			elif( 0.40 <= rand_num < 0.60): self.crop_method = "RightTop"
+			elif( 0.60 <= rand_num < 0.80): self.crop_method = "LeftDown"
+			elif( 0.80 <= rand_num < 1.00): self.crop_method = "RightDown"
 
 		########################################################################################################################################################################
 		''' 在 trimap == 128 的地方 隨機 crop 影像出來訓練, 原始code 隨機點挑出來後當左上角往右下角crop, 我是覺得 隨機點挑出來當中心點往左右上下crop會更好 '''
@@ -65,8 +78,11 @@ class MattingTransform(object):
 		resize_size = RESIZE_SIZE
 		### 可以crop的範圍圈出來
 		trimap = argv[4]
-		if  (self.crop_method == "ord_LeftTop"): trimap_crop = trimap[ 			       : h - crop_size      ,     	          : w - crop_size      ]
-		elif(self.crop_method == "center"     ): trimap_crop = trimap[ crop_size // 2  : h - crop_size // 2 , crop_size // 2  : w - crop_size // 2 ]
+		if  (self.crop_method == "ord_LeftTop" ): trimap_crop = trimap[ 			       : h - crop_size      ,     	          : w - crop_size      ]
+		elif(self.crop_method == "RightTop"    ): trimap_crop = trimap[ 			       : h - crop_size      , crop_size       : w                  ]
+		elif(self.crop_method == "LeftDown"    ): trimap_crop = trimap[ crop_size	       : h                  ,                 : w - crop_size      ]
+		elif(self.crop_method == "RightDown"   ): trimap_crop = trimap[ crop_size	       : h                  , crop_size       : w                  ]
+		elif(self.crop_method == "center"      ): trimap_crop = trimap[ crop_size // 2     : h - crop_size // 2 , crop_size // 2  : w - crop_size // 2 ]
 
 		### 找 trimap == 128 的地方 的座標點, random 的從裡面選一個點 來 crop影像
 		target = np.where(trimap_crop == 128) # if random.random() < 1.0 else np.where(trimap_crop > -100)
@@ -77,6 +93,9 @@ class MattingTransform(object):
 
 		### 隨機選的這一點 設定為左上角 或者為 中心點 為起點,  可以用原版的 左上角當起點往右下角drop, 或者我覺得比較合理的 中心點為起點往上下左右crop
 		if  (self.crop_method == "ord_LeftTop"): cropx, cropy = target[1][rand_ind] 	   		     , target[0][rand_ind] 
+		elif(self.crop_method == "RightTop"   ): cropx, cropy = target[1][rand_ind] + crop_size      , target[0][rand_ind] 
+		elif(self.crop_method == "LeftDown"   ): cropx, cropy = target[1][rand_ind]                  , target[0][rand_ind] + crop_size
+		elif(self.crop_method == "RightDown"  ): cropx, cropy = target[1][rand_ind] + crop_size      , target[0][rand_ind] + crop_size 
 		elif(self.crop_method == "center"     ): cropx, cropy = target[1][rand_ind] + crop_size // 2 , target[0][rand_ind] + crop_size // 2 
 
 		### 0.5的機率左右翻轉
@@ -87,7 +106,10 @@ class MattingTransform(object):
 		for item in argv:
 			''' dilation / erosion 改成有用到的話再去生成, 沒用到的話就用 0 表示, 所以如果遇到 int 就 pass, 非 int 才crop '''
 			if(isinstance(item, int) == False):
-				if  (self.crop_method == "ord_LeftTop"): item = item[cropy 				     : cropy + crop_size      , cropx 				  : cropx + crop_size	   ]
+				if  (self.crop_method == "ord_LeftTop"): item = item[cropy 				     : cropy + crop_size      , cropx 				    : cropx + crop_size	   ]
+				elif(self.crop_method == "RightTop"   ): item = item[cropy 				     : cropy + crop_size      , cropx - crop_size       : cropx            	   ]
+				elif(self.crop_method == "LeftDown"   ): item = item[cropy - crop_size       : cropy                  , cropx                   : cropx + crop_size    ]
+				elif(self.crop_method == "RightDown"  ): item = item[cropy - crop_size       : cropy                  , cropx - crop_size       : cropx            	   ]
 				elif(self.crop_method == "center"     ): item = item[cropy - crop_size // 2  : cropy + crop_size // 2 , cropx - crop_size // 2  : cropx + crop_size // 2 ]
 				if flip_flag:
 					item = cv2.flip(item, 1)
