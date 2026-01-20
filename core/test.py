@@ -608,7 +608,7 @@ def test_samples(args, model):
 			
 		if pred_choice==3:
 			composite = generate_composite_img(img, predict)
-			cv2.imwrite(os.path.join(result_img_dir, extract_pure_name(img_name)+'.png'),composite)
+			cv2.imwrite(os.path.join(result_img_dir, extract_pure_name(img_name)+'.jpg'),composite)
 			predict = predict*255.0
 			cv2.imwrite(os.path.join(result_mask_dir, extract_pure_name(img_name)+'.png'),predict.astype(np.uint8))
 		if pred_choice==2:
