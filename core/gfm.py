@@ -210,7 +210,7 @@ class GFM(nn.Module):
             self.encoder2 = self.resnet.layer2
             self.encoder3 = self.resnet.layer3
             self.encoder4 = self.resnet.layer4
-            self.psp_module = PSPModule(512, 512, (1, 3, 5))
+            self.psp_module = PSPModule(512, 512, self.psp_module_sizes)
             self.psp4 = conv_up_psp(512, 256, 2)
             self.psp3 = conv_up_psp(512, 128, 4)
             self.psp2 = conv_up_psp(512, 64, 8)
@@ -254,7 +254,7 @@ class GFM(nn.Module):
             self.encoder2 = self.resnet.layer2
             self.encoder3 = self.resnet.layer3
             self.encoder4 = self.resnet.layer4
-            self.psp_module = PSPModule(2048, 2048, (1, 3, 5))
+            self.psp_module = PSPModule(2048, 2048, self.psp_module_sizes)
             self.bridge_block = build_bb(2048, 2048, 2048)
             self.psp4 = conv_up_psp(2048, 1024, 2)
             self.psp3 = conv_up_psp(2048, 512, 4)
@@ -307,7 +307,7 @@ class GFM(nn.Module):
                 nn.BatchNorm2d(512),
                 nn.ReLU(inplace=True),
                 nn.MaxPool2d(2, 2, ceil_mode=True))
-            self.psp_module = PSPModule(512, 512, (1, 3, 5))
+            self.psp_module = PSPModule(512, 512, self.psp_module_sizes)
             self.psp4 = conv_up_psp(512, 256, 2)
             self.psp3 = conv_up_psp(512, 128, 4)
             self.psp2 = conv_up_psp(512, 64, 8)
